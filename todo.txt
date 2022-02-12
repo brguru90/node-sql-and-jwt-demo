@@ -1,0 +1,12 @@
+react,
+
+login,signup demo using jwt
+1. storing secret data as non extractable value in cookie with protecion
+2. storing extractable small data on another cookie
+3. storing large unprotected data on local storage
+4. ensure csrf
+crud operation on SQL https://sequelize.org/v7/
+
+
+https://www.section.io/engineering-education/how-to-build-authentication-api-with-jwt-token-in-nodejs/
+https://www.geeksforgeeks.org/jwt-authentication-with-node-js/

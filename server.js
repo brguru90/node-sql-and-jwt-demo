@@ -1,5 +1,7 @@
 const express = require("express")
 const app = express()
+
+
 var port = 8000
 
 app.use(function (req, res, next) {
@@ -13,10 +15,18 @@ app.use(
         extended: false,
     })
 )
+
+
+const db = require("./database/");
+db.sequelize.sync();
+
+
 console.log(`DocumentRoot ${__dirname + "/static"}`)
 app.use("/", express.static(__dirname + "/static/"))
 app.use("/api/", require("./apis/set1"))
 app.use("/api/", require("./apis/set2"))
+app.use("/api/", require("./apis/signin"))
+app.use("/api/", require("./apis/protected"))
 
 app.get("*", function (req, res) {
     console.log("404")

@@ -33,21 +33,91 @@ router.post("/user", (req, res) => {
         })
 })
 
-router.get("/user", (req, res) => {
-    console.log("apis/test1.js")
-    res.json({
-        msg: "apis/test1.js",
-        status: "success"
+
+router.put("/user", (req, res) => {
+    console.log("apis/test1.js", req.body)
+
+    const { where, newUserData } = req.body
+    delete newUserData.uuid
+    Users.update(newUserData, {
+        where: where
     })
+        .then(affected_rows => {
+            res.status(200).json({
+                msg: "apis/test1.js",
+                status: "success",
+                data: affected_rows
+            })
+        })
+        .catch(err => {
+            console.error(err)
+            res.status(500).json({
+                msg: "apis/test1.js",
+                status: "error",
+                data: err?.errors?.map(({ message, path }) => {
+                    return {
+                        field: path,
+                        message
+                    }
+                }) || err?.name || "unknown error"
+            })
+        })
 })
+
 
 
 router.delete("/user", (req, res) => {
-    console.log("apis/test1.js")
-    res.json({
-        msg: "apis/test1.js",
-        status: "success"
+    const { where } = req.body
+
+    Users.destroy({
+        where: where
     })
+        .then(affected_rows => {
+            res.status(200).json({
+                msg: "apis/test1.js",
+                status: "success",
+                data: affected_rows
+            })
+        })
+        .catch(err => {
+            console.error(err)
+            res.status(500).json({
+                msg: "apis/test1.js",
+                status: "error",
+                data: err?.errors?.map(({ message, path }) => {
+                    return {
+                        field: path,
+                        message
+                    }
+                }) || err?.name || "unknown error"
+            })
+        })
 })
+
+router.get("/user", (req, res) => {
+    Users.findOne({ where: { uuid: req?.query?.uuid } })
+        .then(user => {
+            res.status(200).json({
+                msg: "apis/test1.js",
+                status: "success",
+                data: user.toJSON()
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                msg: "apis/test1.js",
+                status: "error",
+                data: err?.errors?.map(({ message, path }) => {
+                    return {
+                        field: path,
+                        message
+                    }
+                }) || err?.name || "unknown error"
+            })
+        })
+})
+
+
 
 module.exports = router

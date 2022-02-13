@@ -1,28 +1,115 @@
 import React, {useState, useRef, useEffect} from "react"
-import {useLocation} from "react-router-dom"
+import {useLocation, useNavigate} from "react-router-dom"
 import "./style.scss"
 
 export default function user_profile() {
     let {state} = useLocation()
+    let navigate = useNavigate()
 
-    const [userData, setUserData] = useState({uuid: state.uuid})
+    const [userData, setUserData] = useState({uuid: state?.uuid})
     let email = useRef(null)
-    let username = useRef(null)
-    let details = useRef(null)
+    let name = useRef(null)
+    let description = useRef(null)
 
-    const gerUserData = () => {}
+    const gerUserData = () => {
+        fetch("/api/user?uuid=" + state?.uuid)
+            .then(async (res) => {
+                if (res.ok) {
+                    return {
+                        body: (await res.json()).data,
+                    }
+                }
+                return {
+                    err: res.status,
+                    body: (await res.json()).data,
+                }
+            })
+            .then(({body, err}) => {
+                console.log(body, err)
+                if (err) {
+                    alert("Error\n" + JSON.stringify(body))
+                } else {
+                    setUserData(body)
+                }
+            })
+    }
 
     const updateUserData = () => {
         const newUserData = {
             email: email.current.value,
-            username: username.current.value,
-            details: details.current.value,
+            name: name.current.value,
+            description: description.current.value,
         }
 
-        setUserData(newUserData)
+        fetch("/api/user", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                newUserData,
+                where: {
+                    uuid: state?.uuid,
+                },
+            }),
+        })
+            .then(async (res) => {
+                if (res.ok) {
+                    return {
+                        body: (await res.json()).data,
+                    }
+                }
+                return {
+                    err: res.status,
+                    body: (await res.json()).data,
+                }
+            })
+            .then(({body, err}) => {
+                console.log(body, err)
+                if (err) {
+                    alert("Error\n" + JSON.stringify(body))
+                } else {
+                    setUserData(newUserData)
+                    // alert(JSON.stringify(body))
+                }
+            })
     }
 
-    const removeAccount = () => {}
+    const removeAccount = () => {
+        fetch("/api/user", {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                where: {
+                    uuid: state?.uuid,
+                },
+            }),
+        })
+            .then(async (res) => {
+                if (res.ok) {
+                    return {
+                        body: (await res.json()).data,
+                    }
+                }
+                return {
+                    err: res.status,
+                    body: (await res.json()).data,
+                }
+            })
+            .then(({body, err}) => {
+                console.log(body, err)
+                if (err) {
+                    alert("Error\n" + JSON.stringify(body))
+                } else {
+                    alert(JSON.stringify(body))
+                    navigate("/signup", {
+                        state: body,
+                    })
+                }
+            })
+    }
 
     useEffect(() => {
         gerUserData()
@@ -49,11 +136,7 @@ export default function user_profile() {
                             <tr>
                                 <td>Username</td>
                                 <td>
-                                    <input
-                                        type="text"
-                                        disabled
-                                        value={userData?.username}
-                                    />
+                                    <input type="text" disabled value={userData?.name} />
                                 </td>
                             </tr>
                             <tr>
@@ -66,7 +149,7 @@ export default function user_profile() {
                                 <td>Detail</td>
                                 <td>
                                     <pre className="ver_resizable">
-                                        {userData?.details}
+                                        {userData?.description}
                                     </pre>
                                 </td>
                             </tr>
@@ -89,8 +172,8 @@ export default function user_profile() {
                                 <td>
                                     <input
                                         type="text"
-                                        value={userData?.username}
-                                        ref={username}
+                                        defaultValue={userData?.name}
+                                        ref={name}
                                     />
                                 </td>
                             </tr>
@@ -99,7 +182,7 @@ export default function user_profile() {
                                 <td>
                                     <input
                                         type="text"
-                                        value={userData?.email}
+                                        defaultValue={userData?.email}
                                         ref={email}
                                     />
                                 </td>
@@ -107,9 +190,11 @@ export default function user_profile() {
                             <tr>
                                 <td>Detail</td>
                                 <td>
-                                    <textarea className="ver_resizable" ref={details}>
-                                        {userData?.details}
-                                    </textarea>
+                                    <textarea
+                                        className="ver_resizable"
+                                        ref={description}
+                                        defaultValue={userData?.description}
+                                    ></textarea>
                                 </td>
                             </tr>
                             <tr>

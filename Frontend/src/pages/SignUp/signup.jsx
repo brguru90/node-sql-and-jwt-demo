@@ -8,13 +8,13 @@ export default function login() {
 
     let email = useRef(null)
     let name = useRef(null)
-    let details = useRef(null)
+    let description = useRef(null)
 
     const createNewUser = () => {
         const newUserData = {
             email: email.current.value,
             name: name.current.value,
-            details: details.current.value,
+            description: description.current.value,
         }
 
         fetch("/api/user", {
@@ -75,7 +75,7 @@ export default function login() {
                             <td>
                                 <textarea
                                     className="ver_resizable"
-                                    ref={details}
+                                    ref={description}
                                 ></textarea>
                             </td>
                         </tr>

@@ -8,9 +8,10 @@ module.exports = function (app) {
             target: "http://localhost:8000/",
             changeOrigin: true,
             agent: keepAliveAgent,
-            pathRewrite: {
-                "^/api/": "/", // remove base path
-            },
+            // pathRewrite: {
+            //     "^/api/": "/", // remove base path
+            // },
+            logLevel: "debug",
         })
     )
 }

@@ -1,5 +1,7 @@
 const express = require("express")
 const app = express()
+require("./database/")
+
 
 
 var port = 8000
@@ -17,8 +19,6 @@ app.use(
 )
 
 
-const db = require("./database/");
-db.sequelize.sync();
 
 
 console.log(`DocumentRoot ${__dirname + "/static"}`)

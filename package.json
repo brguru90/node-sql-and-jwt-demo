@@ -1,24 +1,15 @@
 {
-  "name": "node_sql_and_jwt_demo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.2",
-    "nodemon": "^2.0.15",
-    "sequelize": "^6.16.1",
-    "sqlite3": "^5.0.2"
+  "scripts": {
+    "start": "concurrently 'yarn --cwd ./Backend/ start' 'yarn --cwd ./Frontend/ start' ",
+    "install": "yarn --cwd ./Backend/ install && yarn --cwd ./Frontend/ install"
   },
   "devDependencies": {
     "concurrently": "^7.0.0"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently 'nodemon server.js' 'yarn --cwd ./Frontend/ start' ",
-    "init": "yarn install && yarn --cwd ./Frontend/ install",
-    "server": "node server.js"
-  },
-  "author": "Guruprasad BR",
-  "license": "ISC"
+  "name": "node_sql_and_jwt_demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/brguru90/node-sql-and-jwt-demo.git",
+  "author": "Guruprasad BR <brguru90@gmail.com>",
+  "license": "MIT"
 }

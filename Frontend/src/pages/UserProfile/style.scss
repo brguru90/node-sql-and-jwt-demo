@@ -1,0 +1,28 @@
+.user_profile {
+    background-color: rgb(212, 230, 240);
+    padding-bottom: 20px;
+
+    .form_container {
+        display: grid;
+        grid-template-columns: 1.5fr 1.5fr 1fr;
+
+        fieldset {
+            background-color: white;
+            margin: 20px;
+            padding: 20px;
+
+            table{
+                min-width: 90%;
+            }
+
+            .ver_resizable{
+                height: 100px;
+                padding:5px 10px 5px 10px;
+                width: 100%;
+                resize: vertical;
+                overflow: auto;
+                background-color: rgb(228, 224, 224);
+            }
+        }
+    }
+}

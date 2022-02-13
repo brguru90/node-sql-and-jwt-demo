@@ -13,12 +13,12 @@
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "ESLINT_NO_DEV_ERRORS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -59,10 +59,10 @@
     "eslint-scope": "^4.0.3",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.7",
-    "node-sass": "^6.0",
     "prettier": "^2.0.5",
     "http-proxy-middleware": "^0.20.0",
-    "http": "0.0.1-security"
+    "http": "0.0.1-security",
+    "node-sass": "^6.0"
   },
   "husky": {
     "hooks": {

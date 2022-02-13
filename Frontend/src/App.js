@@ -1,30 +1,19 @@
 import React, {Component} from "react"
-import "./App.scss"
-import {BrowserRouter as Router, HashRouter, Switch, Route} from "react-router-dom"
-import SignUp from "./pages/signup.jsx"
-import Login from "./pages/login.jsx"
-import userProfile from "./pages/user_profile.jsx"
+import {HashRouter, Routes, Route} from "react-router-dom"
+import SignUp from "./pages/SignUp/signup.jsx"
+import Login from "./pages/Login/login.jsx"
+import UserProfile from "./pages/UserProfile/user_profile.jsx"
 
 export default class App extends Component {
     render() {
         return (
-            <div className="App">
-                <Router>
-                    <Switch>
-                        <HashRouter>
-                            <Switch>
-                                <Route path="/" exact component={Login} />
-                                <Route path="/signup" exact component={SignUp} />
-                                <Route
-                                    path="/user_profile"
-                                    exact
-                                    component={userProfile}
-                                />
-                            </Switch>
-                        </HashRouter>
-                    </Switch>
-                </Router>
-            </div>
+            <HashRouter>
+                <Routes>
+                    <Route path="/" exact element={<Login />} />
+                    <Route path="signup" exact element={<SignUp />} />
+                    <Route path="user_profile" exact element={<UserProfile />} />
+                </Routes>
+            </HashRouter>
         )
     }
 }

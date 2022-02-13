@@ -27,12 +27,12 @@ export default function login() {
             .then(async (res) => {
                 if (res.ok) {
                     return {
-                        body: await res.json(),
+                        body: (await res.json()).data,
                     }
                 }
                 return {
                     err: res.status,
-                    body: await res.json(),
+                    body: (await res.json()).data,
                 }
             })
             .then(({body, err}) => {
@@ -40,7 +40,9 @@ export default function login() {
                 if (err) {
                     alert("Error\n" + JSON.stringify(body))
                 } else {
-                    navigate("/user_profile")
+                    navigate("/user_profile", {
+                        state: body,
+                    })
                 }
             })
     }

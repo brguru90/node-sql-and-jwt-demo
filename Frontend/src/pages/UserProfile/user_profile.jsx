@@ -1,9 +1,11 @@
 import React, {useState, useRef, useEffect} from "react"
+import {useLocation} from "react-router-dom"
 import "./style.scss"
 
 export default function user_profile() {
-    const [userData, setUserData] = useState(null)
-    let uuid = useRef(null)
+    let {state} = useLocation()
+
+    const [userData, setUserData] = useState({uuid: state.uuid})
     let email = useRef(null)
     let username = useRef(null)
     let details = useRef(null)
@@ -79,7 +81,7 @@ export default function user_profile() {
                             <tr>
                                 <td>UUID</td>
                                 <td>
-                                    <input type="text" disabled />
+                                    <input type="text" disabled value={userData?.uuid} />
                                 </td>
                             </tr>
                             <tr>
@@ -130,7 +132,7 @@ export default function user_profile() {
                             <tr>
                                 <td>UUID</td>
                                 <td>
-                                    <input type="text" disabled value={uuid} />
+                                    <input type="text" disabled value={userData?.uuid} />
                                 </td>
                             </tr>
                             <tr>

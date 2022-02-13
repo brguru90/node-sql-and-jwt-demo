@@ -1,0 +1,3 @@
+{   
+    "ignore": ["frontend", "database.sqlite",".gitignore"] 
+}

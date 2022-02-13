@@ -35,5 +35,5 @@ app.get("*", function (req, res) {
 
 app.listen(port, () => {
     console.log(`App started running at ${port}\ncwd is ${__dirname}`)
-    console.log(`http://127.0.0.1:${port}`)
+    console.log(`running ========>  http://127.0.0.1:${port}`)
 })

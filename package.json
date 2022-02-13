@@ -10,10 +10,13 @@
     "sequelize": "^6.16.1",
     "sqlite3": "^5.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
+    "start": "concurrently 'nodemon server.js' 'yarn --cwd ./Frontend/ start' ",
+    "init": "yarn install && yarn --cwd ./Frontend/ install",
     "server": "node server.js"
   },
   "author": "Guruprasad BR",

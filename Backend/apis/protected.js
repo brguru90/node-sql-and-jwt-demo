@@ -1,24 +1,30 @@
 const express = require("express")
 const router = express.Router()
 const { Users } = require("../database/")
+const { validateCredential } = require("../modules/")
 
 
-router.use((req, res, next) => {
+
+router.use("/user", (req, res, next) => {
     console.log("----------Protected APIs middleware-------------")
-    next()
+    if (validateCredential(req, res)) {
+        next()
+    }
 })
 
 
 // Profile update
 router.put("/user", (req, res) => {
-    const { where, newUserData } = req.body
+    const { newUserData } = req.body
     delete newUserData.uuid
     Users.update(newUserData, {
-        where: where
+        where: {
+            uuid: req?.decoded_token?.data?.uuid
+        }
     })
         .then(affected_rows => {
             res.status(200).json({
-                msg: "apis/test1.js",
+                msg: "Updated",
                 status: "success",
                 data: affected_rows
             })
@@ -26,7 +32,7 @@ router.put("/user", (req, res) => {
         .catch(err => {
             console.error(err)
             res.status(500).json({
-                msg: "apis/test1.js",
+                msg: "Server side error",
                 status: "error",
                 data: err?.errors?.map(({ message, path }) => {
                     return {
@@ -41,14 +47,16 @@ router.put("/user", (req, res) => {
 
 // Delete account
 router.delete("/user", (req, res) => {
-    const { where } = req.body
-
     Users.destroy({
-        where: where
+        where: {
+            uuid: req?.decoded_token?.data?.uuid
+        }
     })
         .then(affected_rows => {
+            res.clearCookie("access_token");
+            res.clearCookie("user_data");
             res.status(200).json({
-                msg: "apis/test1.js",
+                msg: "Deleted",
                 status: "success",
                 data: affected_rows
             })
@@ -56,7 +64,7 @@ router.delete("/user", (req, res) => {
         .catch(err => {
             console.error(err)
             res.status(500).json({
-                msg: "apis/test1.js",
+                msg: "Server side error",
                 status: "error",
                 data: err?.errors?.map(({ message, path }) => {
                     return {
@@ -70,17 +78,23 @@ router.delete("/user", (req, res) => {
 
 // Get user data
 router.get("/user", (req, res) => {
-    Users.findOne({ where: { uuid: req?.query?.uuid } })
+    Users.findOne({ where: { uuid: req?.decoded_token?.data?.uuid } })
         .then(user => {
+            if (!user) {
+                return res.status(200).json({
+                    msg: "No record found",
+                    status: "error"
+                })
+            }
             res.status(200).json({
-                msg: "apis/test1.js",
+                msg: "Found",
                 status: "success",
                 data: user.toJSON()
             })
         })
         .catch(err => {
             res.status(500).json({
-                msg: "apis/test1.js",
+                msg: "Server side error",
                 status: "error",
                 data: err?.errors?.map(({ message, path }) => {
                     return {
@@ -90,6 +104,29 @@ router.get("/user", (req, res) => {
                 }) || err?.name || "unknown error"
             })
         })
+})
+
+
+// Get user data
+router.get("/user/logout", (req, res) => {
+    try {
+        res.clearCookie("access_token");
+        res.clearCookie("user_data");
+        res.status(200).json({
+            msg: "Logged out",
+            status: "success",
+        })
+    } catch (error) {
+        res.status(500).json({
+            msg: "Server side error",
+            status: "error"
+        })
+    }
+})
+
+// informing any remaining method are not allowed
+router.all("/user", (req, res) => {
+    res.sendStatus(405)
 })
 
 

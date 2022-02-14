@@ -21,12 +21,12 @@ export default function login() {
             .then(async (res) => {
                 if (res.ok) {
                     return {
-                        body: (await res.json()).data,
+                        body: await res.json(),
                     }
                 }
                 return {
                     err: res.status,
-                    body: (await res.json()).data,
+                    body: await res.json(),
                 }
             })
             .then(({body, err}) => {
@@ -35,7 +35,7 @@ export default function login() {
                     alert("Error\n" + JSON.stringify(body))
                 } else {
                     navigate("/user_profile", {
-                        state: body,
+                        state: body.data,
                     })
                 }
             })
@@ -48,27 +48,29 @@ export default function login() {
             </center>
             <br />
 
-            <fieldset>
-                <legend>User detail</legend>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Email</td>
-                            <td>
-                                <input
-                                    type="email"
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan={2}>
-                                <input type="button" value="Login" onClick={Login} />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </fieldset>
+            <form>
+                <fieldset>
+                    <legend>User detail</legend>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Email</td>
+                                <td>
+                                    <input
+                                        type="email"
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={2}>
+                                    <input type="button" value="Login" onClick={Login} />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </form>
 
             <label>
                 New user? <Link to="/signup">Sign up</Link>

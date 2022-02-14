@@ -4,7 +4,11 @@ login,signup demo using jwt
 1. storing secret data as non extractable value in cookie with protecion
 2. storing extractable small data on another cookie
 3. storing large unprotected data on local storage
-4. ensure csrf
+4. Logout from particuler devices (block token by saving & checking an entry on redis)
+# 5. Logout from all devices 
+    on the user table store random number & attach the random to token at the time of login
+    if logout from all trggered then change the random on user table, so there will be mis
+6. ensure csrf
 crud operation on SQL https://sequelize.org/v7/
 
 

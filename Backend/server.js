@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 const dotenv = require('dotenv');
+const cookieParser = require("cookie-parser");
 dotenv.config();
 require("./database/")
 
@@ -19,6 +20,7 @@ app.use(
         extended: false,
     })
 )
+app.use(cookieParser());
 
 
 
@@ -34,7 +36,7 @@ app.use("/api/", require("./apis/set2"))
 
 app.get("*", function (req, res) {
     console.log("404")
-    res.send("<html><body><center><h1>404</h1></center></body></html)")
+    res.status(404).send("<html><body><center><h1>404</h1></center></body></html)")
 })
 
 app.listen(port, () => {

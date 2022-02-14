@@ -3,7 +3,7 @@ import {Link} from "react-router-dom"
 import {useNavigate} from "react-router-dom"
 import "./style.scss"
 
-export default function login() {
+export default function signup() {
     let navigate = useNavigate()
 
     let email = useRef(null)
@@ -17,7 +17,7 @@ export default function login() {
             description: description.current.value,
         }
 
-        fetch("/api/user", {
+        fetch("/api/sign_up", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
@@ -27,12 +27,12 @@ export default function login() {
             .then(async (res) => {
                 if (res.ok) {
                     return {
-                        body: (await res.json()).data,
+                        body: await res.json(),
                     }
                 }
                 return {
                     err: res.status,
-                    body: (await res.json()).data,
+                    body: await res.json(),
                 }
             })
             .then(({body, err}) => {
@@ -41,7 +41,7 @@ export default function login() {
                     alert("Error\n" + JSON.stringify(body))
                 } else {
                     navigate("/user_profile", {
-                        state: body,
+                        state: body.data,
                     })
                 }
             })

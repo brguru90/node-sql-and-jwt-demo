@@ -116,7 +116,6 @@ export default function user_profile() {
                 if (err) {
                     alert("Error\n" + JSON.stringify(body))
                 } else {
-                    alert(JSON.stringify(body))
                     navigate("/")
                 }
             })
@@ -145,7 +144,7 @@ export default function user_profile() {
                                         <input
                                             type="text"
                                             disabled
-                                            value={userData?.uuid}
+                                            value={userData?.uuid || ""}
                                         />
                                     </td>
                                 </tr>
@@ -155,7 +154,7 @@ export default function user_profile() {
                                         <input
                                             type="text"
                                             disabled
-                                            value={userData?.name}
+                                            value={userData?.name || ""}
                                         />
                                     </td>
                                 </tr>
@@ -165,7 +164,7 @@ export default function user_profile() {
                                         <input
                                             type="text"
                                             disabled
-                                            value={userData?.email}
+                                            value={userData?.email || ""}
                                         />
                                     </td>
                                 </tr>
@@ -173,7 +172,7 @@ export default function user_profile() {
                                     <td>Detail</td>
                                     <td>
                                         <pre className="ver_resizable">
-                                            {userData?.description}
+                                            {userData?.description || ""}
                                         </pre>
                                     </td>
                                 </tr>
@@ -193,7 +192,7 @@ export default function user_profile() {
                                         <input
                                             type="text"
                                             disabled
-                                            value={userData?.uuid}
+                                            value={userData?.uuid || ""}
                                         />
                                     </td>
                                 </tr>
@@ -202,7 +201,7 @@ export default function user_profile() {
                                     <td>
                                         <input
                                             type="text"
-                                            defaultValue={userData?.name}
+                                            defaultValue={userData?.name || ""}
                                             ref={name}
                                         />
                                     </td>
@@ -212,7 +211,7 @@ export default function user_profile() {
                                     <td>
                                         <input
                                             type="text"
-                                            defaultValue={userData?.email}
+                                            defaultValue={userData?.email || ""}
                                             ref={email}
                                         />
                                     </td>
@@ -223,7 +222,7 @@ export default function user_profile() {
                                         <textarea
                                             className="ver_resizable"
                                             ref={description}
-                                            defaultValue={userData?.description}
+                                            defaultValue={userData?.description || ""}
                                         ></textarea>
                                     </td>
                                 </tr>
@@ -252,7 +251,7 @@ export default function user_profile() {
                                         <input
                                             type="text"
                                             disabled
-                                            value={userData?.uuid}
+                                            value={userData?.uuid || ""}
                                         />
                                     </td>
                                 </tr>

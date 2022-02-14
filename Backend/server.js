@@ -1,10 +1,12 @@
 const express = require("express")
 const app = express()
+const dotenv = require('dotenv');
+dotenv.config();
 require("./database/")
 
 
 
-var port = 8000
+const port = process.env.PORT || 8000
 
 app.use(function (req, res, next) {
     console.log("global middleware")
@@ -22,11 +24,13 @@ app.use(
 
 
 console.log(`DocumentRoot ${__dirname + "/static"}`)
+
+// APIs import order matters
 app.use("/", express.static(__dirname + "/static/"))
+app.use("/api/", require("./apis/protected"))
+app.use("/api/", require("./apis/signin"))
 app.use("/api/", require("./apis/set1"))
 app.use("/api/", require("./apis/set2"))
-app.use("/api/", require("./apis/signin"))
-app.use("/api/", require("./apis/protected"))
 
 app.get("*", function (req, res) {
     console.log("404")

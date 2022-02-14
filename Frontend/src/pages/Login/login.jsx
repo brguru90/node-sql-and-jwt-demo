@@ -1,13 +1,44 @@
 import React from "react"
 import {useState} from "react"
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
+
 import "./style.scss"
 
 export default function login() {
+    let navigate = useNavigate()
     const [email, setEmail] = useState(null)
 
     const Login = () => {
-        alert(email)
+        fetch("/api/login", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+            }),
+        })
+            .then(async (res) => {
+                if (res.ok) {
+                    return {
+                        body: (await res.json()).data,
+                    }
+                }
+                return {
+                    err: res.status,
+                    body: (await res.json()).data,
+                }
+            })
+            .then(({body, err}) => {
+                console.log(body, err)
+                if (err) {
+                    alert("Error\n" + JSON.stringify(body))
+                } else {
+                    navigate("/user_profile", {
+                        state: body,
+                    })
+                }
+            })
     }
 
     return (
@@ -25,7 +56,7 @@ export default function login() {
                             <td>Email</td>
                             <td>
                                 <input
-                                    type="text"
+                                    type="email"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </td>

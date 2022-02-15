@@ -10,6 +10,7 @@
     "express": "^4.17.2",
     "express-useragent": "^1.0.15",
     "jsonwebtoken": "^8.5.1",
+    "node-cron": "^3.0.0",
     "nodemon": "^2.0.15",
     "redis": "^4.0.3",
     "sequelize": "^6.16.1",

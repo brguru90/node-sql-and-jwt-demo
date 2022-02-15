@@ -293,7 +293,7 @@ export default function user_profile() {
                                         return (
                                             <tr key={token_id}>
                                                 <td >
-                                                    <input type="button" value="delete" onClick={() => blockToken(token_id, exp)} />
+                                                   {status=="active" && <input type="button" value="delete" onClick={() => blockToken(token_id, exp)} />} 
                                                 </td>
                                                 <td className="ip">{ip}</td>
                                                 <td className="ip">{status}</td>

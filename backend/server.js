@@ -6,6 +6,7 @@ const useragent = require('express-useragent')
 dotenv.config({path:__dirname+"/../.env"});
 require("./database/sqldb")
 require("./database/redisdb")
+require("./cron_jobs/").init_crons()
 
 
 const port = process.env.PORT || 8000

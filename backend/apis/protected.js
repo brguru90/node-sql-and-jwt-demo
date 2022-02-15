@@ -134,8 +134,8 @@ router.get("/user/active_sessions", (req, res) => {
             }
         }
     })
-        .then(user => {
-            if (!user) {
+        .then(sessions => {
+            if (!sessions) {
                 return res.status(400).json({
                     msg: "No record found",
                     status: "error"
@@ -144,7 +144,7 @@ router.get("/user/active_sessions", (req, res) => {
             res.status(200).json({
                 msg: "Found",
                 status: "success",
-                data: user
+                data: sessions
             })
         })
         .catch(err => {
@@ -169,8 +169,8 @@ router.post("/user/block_token", (req, res) => {
         where: {
             user_uuid: uuid,
             token_id: req?.body?.token_id,
-            exp: req?.body?.exp
-            // status: "active"
+            exp: req?.body?.exp,
+            status: "active"
         }
     })
         .then(async (affected_rows) => {
@@ -212,7 +212,7 @@ router.post("/user/block_token", (req, res) => {
                 })
             }
             res.status(404).json({
-                msg: "Token doesn't exists",
+                msg: "Token doesn't exists/Already blacklisted",
                 status: "error"
             })
         })

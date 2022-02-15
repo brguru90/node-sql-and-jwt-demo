@@ -27,11 +27,19 @@ const setCookie = (res, key, value) => {
 }
 
 
+const loginStatus = (req) => {
+    let decoded_token = false
+    try {
+        decoded_token = jwt.verify(req.cookies.access_token, JWT_SECRET_KEY);
+    } catch (error) {}
+    return decoded_token
+}
+
 const validateCredential = (req, res) => {
     let decoded_token = null
     try {
         decoded_token = jwt.verify(req.cookies.access_token, JWT_SECRET_KEY);
-        console.log("1 decoded_token",decoded_token)
+        console.log("1 decoded_token", decoded_token)
         req.decoded_token = decoded_token
         if (!decoded_token) {
             res.status(401).json({
@@ -54,5 +62,6 @@ module.exports = {
     random: _random,
     generateAccessToken,
     setCookie,
-    validateCredential
+    validateCredential,
+    loginStatus
 }

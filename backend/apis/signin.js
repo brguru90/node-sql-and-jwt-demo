@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
-const { Users } = require("../database/")
-const {generateAccessToken,setCookie} = require("../modules/")
+const { Users } = require("../database/sqldb")
+const {generateAccessToken,setCookie,loginStatus} = require("../modules/")
 
 router.use((req, res, next) => {
     console.log("----------Unprotected APIs signup & login middleware-------------")
@@ -16,8 +16,8 @@ router.post("/sign_up", (req, res) => {
             const access_token= generateAccessToken(new_entry?.email,{email:new_entry?.email,uuid:new_entry?.uuid})
             setCookie(res,"access_token",access_token)
             setCookie(res,"user_data",new_entry)
-            res.status(200).json({
-                msg: "apis/test1.js",
+            res.status(201).json({
+                msg: "Account created",
                 status: "success",
                 data: new_entry,
                 access_token: access_token
@@ -25,10 +25,9 @@ router.post("/sign_up", (req, res) => {
         })
         .catch(err => {
             console.log(err)
-            res.status(500).json({
-                msg: "apis/test1.js",
+            res.status(err?.errors?406:500).json({
                 status: "error",
-                data: err?.errors?.map(({ message, path }) => {
+                msg: err?.errors?.map(({ message, path }) => {
                     return {
                         field: path,
                         message
@@ -53,7 +52,7 @@ router.post("/login", (req, res) => {
             setCookie(res,"access_token",access_token)
             setCookie(res,"user_data",JSON.stringify(new_entry))
             res.status(200).json({
-                msg: "apis/test1.js",
+                msg: "Authorization success",
                 status: "success",
                 data: new_entry,
                 access_token: access_token
@@ -62,9 +61,8 @@ router.post("/login", (req, res) => {
         .catch(err => {
             console.log(err)
             res.status(500).json({
-                msg: "apis/test1.js",
                 status: "error",
-                data: err?.errors?.map(({ message, path }) => {
+                msg: err?.errors?.map(({ message, path }) => {
                     return {
                         field: path,
                         message
@@ -73,6 +71,22 @@ router.post("/login", (req, res) => {
             })
         })
 })
+
+
+router.all("/login_status", (req, res) => {
+    if(login_status=loginStatus(req)){
+        return res.status(200).json({
+            msg: "active",
+            status: "success",
+            data: login_status?.data
+        })
+    }
+    res.status(401).json({
+        msg: "unAuthorized",
+        status: "error",
+    })
+})
+
 
 
 

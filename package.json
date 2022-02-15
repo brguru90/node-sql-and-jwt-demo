@@ -1,15 +1,36 @@
 {
   "scripts": {
-    "start": "concurrently 'yarn --cwd ./Backend/ start' 'yarn --cwd ./Frontend/ start' ",
-    "install": "yarn --cwd ./Backend/ install && yarn --cwd ./Frontend/ install"
+    "start": "concurrently 'yarn --cwd ./backend/ start' 'yarn --cwd ./frontend/ start' ",
+    "install": "yarn --cwd ./backend/ install && yarn --cwd ./frontend/ install",
+    "build": "yarn --cwd ./frontend/ build",
+    "@1": "====================================================================================",
+    "start_prod": "pm2 start ecosystem.config.js --env production",
+    "stop_prod": "pm2 stop ecosystem.config.js --env production",
+    "reload_prod": "pm2 reload ecosystem.config.js --env production",
+    "autostart_prod": "pm2 startup",
+    "remove_autostart_prod": "pm2 unstartup",
+    "pm2_save": "pm2 save",
+    "pm2_list": "pm2 list",
+    "pm2": "pm2",
+    "@2": "====================================================================================",
+    "enable_prod": "npm-run-all start_prod autostart_prod pm2_save pm2_list",
+    "enable_prod_with_build": "npm-run-all  build start_prod autostart_prod pm2_save pm2_list",
+    "disable_prod": "npm-run-all stop_prod remove_autostart_prod pm2_save pm2_list",
+    "restart_prod": "npm-run-all disable_prod enable_prod",
+    "reload_ui": "npm-run-all build reload_prod"
   },
   "devDependencies": {
-    "concurrently": "^7.0.0"
+    "concurrently": "^7.0.0",
+    "dotenv": "^16.0.0",
+    "npm-run-all": "^4.1.5"
   },
   "name": "node_sql_and_jwt_demo",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/brguru90/node-sql-and-jwt-demo.git",
   "author": "Guruprasad BR <brguru90@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "pm2": "^5.1.2"
+  }
 }

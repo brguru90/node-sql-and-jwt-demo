@@ -1,6 +1,7 @@
-import React, {useRef} from "react"
-import {Link} from "react-router-dom"
-import {useNavigate} from "react-router-dom"
+import React, { useRef } from "react"
+import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import {exeFetch} from "../../modules"
 import "./style.scss"
 
 export default function signup() {
@@ -17,34 +18,19 @@ export default function signup() {
             description: description.current.value,
         }
 
-        fetch("/api/sign_up", {
+        exeFetch("/api/sign_up", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(newUserData),
         })
-            .then(async (res) => {
-                if (res.ok) {
-                    return {
-                        body: await res.json(),
-                    }
-                }
-                return {
-                    err: res.status,
-                    body: await res.json(),
-                }
+            .then(({ body }) => {
+                navigate("/user_profile", {
+                    state: body.data,
+                })
             })
-            .then(({body, err}) => {
-                console.log(body, err)
-                if (err) {
-                    alert("Error\n" + JSON.stringify(body))
-                } else {
-                    navigate("/user_profile", {
-                        state: body.data,
-                    })
-                }
-            })
+            .catch(e => alert("Error\n" + JSON.stringify(e)))
     }
 
     return (

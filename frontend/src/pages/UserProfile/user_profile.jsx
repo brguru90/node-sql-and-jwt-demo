@@ -1,37 +1,24 @@
-import React, {useState, useRef, useEffect} from "react"
-import {useLocation, useNavigate} from "react-router-dom"
+import React, { useState, useRef, useEffect } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import {exeFetch} from "../../modules"
 import "./style.scss"
 
+
 export default function user_profile() {
-    let {state} = useLocation()
+    let { state } = useLocation()
     let navigate = useNavigate()
 
-    const [userData, setUserData] = useState({uuid: state?.uuid})
+    const [userData, setUserData] = useState({ uuid: state?.uuid })
     let email = useRef(null)
     let name = useRef(null)
     let description = useRef(null)
 
     const gerUserData = () => {
-        fetch("/api/user?uuid=" + state?.uuid)
-            .then(async (res) => {
-                if (res.ok) {
-                    return {
-                        body: await res.json(),
-                    }
-                }
-                return {
-                    err: res.status,
-                    body: await res.json(),
-                }
+        exeFetch("/api/user?uuid=" + state?.uuid)
+            .then(({ body }) => {
+                setUserData(body.data)
             })
-            .then(({body, err}) => {
-                console.log(body, err)
-                if (err) {
-                    alert("Error\n" + JSON.stringify(body))
-                } else {
-                    setUserData(body.data)
-                }
-            })
+            .catch(e => alert("Error\n" + JSON.stringify(e)))
     }
 
     const updateUserData = () => {
@@ -41,7 +28,7 @@ export default function user_profile() {
             description: description.current.value,
         }
 
-        fetch("/api/user", {
+        exeFetch("/api/user", {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
@@ -50,68 +37,27 @@ export default function user_profile() {
                 newUserData,
             }),
         })
-            .then(async (res) => {
-                if (res.ok) {
-                    return {
-                        body: await res.json(),
-                    }
-                }
-                return {
-                    err: res.status,
-                    body: await res.json(),
-                }
+            .then(() => {
+                newUserData.uuid=userData.uuid
+                setUserData(newUserData)
             })
-            .then(({body, err}) => {
-                console.log(body, err)
-                if (err) {
-                    alert("Error\n" + JSON.stringify(body))
-                } else {
-                    setUserData(newUserData)
-                    // alert(JSON.stringify(body))
-                }
-            })
+            .catch(e => alert("Error\n" + JSON.stringify(e)))
     }
 
     const removeAccount = () => {
-        fetch("/api/user", {
+        exeFetch("/api/user", {
             method: "delete",
         })
-            .then(async (res) => {
-                if (res.ok) {
-                    return {
-                        body: await res.json(),
-                    }
-                }
-                return {
-                    err: res.status,
-                    body: await res.json(),
-                }
+            .then(({ body }) => {
+                alert(JSON.stringify(body))
+                navigate("/signup")
             })
-            .then(({body, err}) => {
-                console.log(body, err)
-                if (err) {
-                    alert("Error\n" + JSON.stringify(body))
-                } else {
-                    alert(JSON.stringify(body))
-                    navigate("/signup")
-                }
-            })
+            .catch(e => alert("Error\n" + JSON.stringify(e)))
     }
 
     const Logout = () => {
-        fetch("/api/user/logout")
-            .then(async (res) => {
-                if (res.ok) {
-                    return {
-                        body: await res.json(),
-                    }
-                }
-                return {
-                    err: res.status,
-                    body: await res.json(),
-                }
-            })
-            .then(({body, err}) => {
+        exeFetch("/api/user/logout", {}, () => navigate("/"))
+            .then(({ body, err }) => {
                 console.log(body, err)
                 if (err) {
                     alert("Error\n" + JSON.stringify(body))
@@ -120,6 +66,9 @@ export default function user_profile() {
                 }
             })
     }
+
+
+
 
     useEffect(() => {
         gerUserData()

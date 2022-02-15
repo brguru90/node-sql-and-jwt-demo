@@ -1,15 +1,17 @@
 import React from "react"
-import {useState} from "react"
-import {Link, useNavigate} from "react-router-dom"
-
+import { useEffect } from "react"
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import {exeFetch} from "../../modules"
 import "./style.scss"
+
 
 export default function login() {
     let navigate = useNavigate()
     const [email, setEmail] = useState(null)
 
     const Login = () => {
-        fetch("/api/login", {
+        exeFetch("/api/login", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
@@ -18,28 +20,27 @@ export default function login() {
                 email: email,
             }),
         })
-            .then(async (res) => {
-                if (res.ok) {
-                    return {
-                        body: await res.json(),
-                    }
-                }
-                return {
-                    err: res.status,
-                    body: await res.json(),
-                }
+            .then(({ body }) => {
+                navigate("/user_profile", {
+                    state: body.data,
+                })
             })
-            .then(({body, err}) => {
-                console.log(body, err)
-                if (err) {
-                    alert("Error\n" + JSON.stringify(body))
-                } else {
-                    navigate("/user_profile", {
-                        state: body.data,
-                    })
-                }
+            .catch(e => alert("Error\n" + JSON.stringify(e)))
+    }
+
+    const login_check = () => {
+        exeFetch("/api/login_status")
+            .then(({ body }) => {
+                navigate("/user_profile", {
+                    state: body.data,
+                })
             })
     }
+
+    useEffect(() => {
+        login_check()
+    }, [])
+
 
     return (
         <div className="login">

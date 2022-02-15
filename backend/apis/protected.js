@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { Users } = require("../database/")
+const { Users } = require("../database/sqldb")
 const { validateCredential } = require("../modules/")
 
 
@@ -32,9 +32,8 @@ router.put("/user", (req, res) => {
         .catch(err => {
             console.error(err)
             res.status(500).json({
-                msg: "Server side error",
                 status: "error",
-                data: err?.errors?.map(({ message, path }) => {
+                msg: err?.errors?.map(({ message, path }) => {
                     return {
                         field: path,
                         message
@@ -64,9 +63,8 @@ router.delete("/user", (req, res) => {
         .catch(err => {
             console.error(err)
             res.status(500).json({
-                msg: "Server side error",
                 status: "error",
-                data: err?.errors?.map(({ message, path }) => {
+                msg: err?.errors?.map(({ message, path }) => {
                     return {
                         field: path,
                         message
@@ -81,7 +79,7 @@ router.get("/user", (req, res) => {
     Users.findOne({ where: { uuid: req?.decoded_token?.data?.uuid } })
         .then(user => {
             if (!user) {
-                return res.status(200).json({
+                return res.status(400).json({
                     msg: "No record found",
                     status: "error"
                 })
@@ -94,9 +92,7 @@ router.get("/user", (req, res) => {
         })
         .catch(err => {
             res.status(500).json({
-                msg: "Server side error",
-                status: "error",
-                data: err?.errors?.map(({ message, path }) => {
+                msg: err?.errors?.map(({ message, path }) => {
                     return {
                         field: path,
                         message

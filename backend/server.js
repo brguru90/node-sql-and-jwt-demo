@@ -2,10 +2,10 @@ const express = require("express")
 const app = express()
 const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
+const useragent = require('express-useragent')
 dotenv.config({path:__dirname+"/../.env"});
 require("./database/sqldb")
-// require("./database/redisdb")
-
+require("./database/redisdb")
 
 
 const port = process.env.PORT || 8000
@@ -22,7 +22,7 @@ app.use(
     })
 )
 app.use(cookieParser());
-
+app.use(useragent.express());
 
 
 

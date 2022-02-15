@@ -1,13 +1,23 @@
+const redis = require("redis")
 
-const connectRedis = () => {
-    let client = redis.createClient();
-    client.on('error', (err) => {
-        console.log("Error " + err);
-        throw err
-    })
-}
+const db = {};
 
-module.exports = {
-    client,
-    connectRedis
-}
+(async function () {
+    if (!db.client) {
+        db.client = redis.createClient(6379);
+        await db.client.connect();
+
+        db.client.on('error', (err) => {
+            console.log(" !!! =======> RedisError " + err);
+            throw err
+        })
+        console.log(db.client.ping())       
+        await db.client.hSet("test",
+            {
+                name: "guru"
+            }
+        )
+    }
+})()
+
+module.exports = db

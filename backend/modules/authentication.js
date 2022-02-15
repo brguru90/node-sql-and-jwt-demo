@@ -12,11 +12,14 @@ const generateAccessToken = (uname, data = {}) => {
     const access_token_payload = {
         'data': data,
         'uname': uname,
-        'token_id': String(_random(1, 1000)) + "_" + String(new Date().getTime()),
+        'token_id': data?.uuid + "_" + String(_random(1, 1000)) + "_" + String(new Date().getTime()),
         'exp': new Date().getTime() + JWT_TOKEN_EXPIRE,
         'iat': new Date().getTime(),
     }
-    return jwt.sign(access_token_payload, JWT_SECRET_KEY)
+    return {
+        access_token: jwt.sign(access_token_payload, JWT_SECRET_KEY),
+        access_token_payload
+    }
 }
 
 
@@ -31,7 +34,7 @@ const loginStatus = (req) => {
     let decoded_token = false
     try {
         decoded_token = jwt.verify(req.cookies.access_token, JWT_SECRET_KEY);
-    } catch (error) {}
+    } catch (error) { }
     return decoded_token
 }
 

@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { Users } = require("../database/sqldb")
+const { Users,activeSession } = require("../database/sqldb")
 const { validateCredential } = require("../modules/")
 
 
@@ -118,6 +118,34 @@ router.get("/user/logout", (req, res) => {
             status: "error"
         })
     }
+})
+
+router.get("/user/active_sessions", (req, res) => {
+    activeSession.findAll({ where: { user_uuid: req?.decoded_token?.data?.uuid } })
+        .then(user => {
+            if (!user) {
+                return res.status(400).json({
+                    msg: "No record found",
+                    status: "error"
+                })
+            }
+            res.status(200).json({
+                msg: "Found",
+                status: "success",
+                data: user
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                msg: err?.errors?.map(({ message, path }) => {
+                    return {
+                        field: path,
+                        message
+                    }
+                }) || err?.name || "unknown error"
+            })
+        })
 })
 
 // informing any remaining method are not allowed

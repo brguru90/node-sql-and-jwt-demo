@@ -1,7 +1,8 @@
 const express = require("express")
 const router = express.Router()
-const { Users } = require("../database/sqldb")
-const {generateAccessToken,setCookie,loginStatus} = require("../modules/")
+const { Users, activeSession } = require("../database/sqldb")
+const { client } = require("../database/redisdb")
+const { generateAccessToken, setCookie, loginStatus, getClientIP } = require("../modules/")
 
 router.use((req, res, next) => {
     console.log("----------Unprotected APIs signup & login middleware-------------")
@@ -11,11 +12,17 @@ router.use((req, res, next) => {
 
 router.post("/sign_up", (req, res) => {
     Users.create(req.body)
-        .then(user => {
-            const new_entry=user.toJSON()
-            const access_token= generateAccessToken(new_entry?.email,{email:new_entry?.email,uuid:new_entry?.uuid})
-            setCookie(res,"access_token",access_token)
-            setCookie(res,"user_data",new_entry)
+        .then(async (user) => {
+            const new_entry = user.toJSON()
+            const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, { email: new_entry?.email, uuid: new_entry?.uuid })
+            setCookie(res, "access_token", access_token)
+            setCookie(res, "user_data", new_entry)
+            await activeSession.create({
+                user_uuid: new_entry?.uuid,
+                token_id: access_token_payload.token_id,
+                ua: JSON.stringify(req.useragent),
+                ip: getClientIP(req)
+            })
             res.status(201).json({
                 msg: "Account created",
                 status: "success",
@@ -25,7 +32,7 @@ router.post("/sign_up", (req, res) => {
         })
         .catch(err => {
             console.log(err)
-            res.status(err?.errors?406:500).json({
+            res.status(err?.errors ? 406 : 500).json({
                 status: "error",
                 msg: err?.errors?.map(({ message, path }) => {
                     return {
@@ -40,17 +47,29 @@ router.post("/sign_up", (req, res) => {
 
 router.post("/login", (req, res) => {
     Users.findOne({ where: { email: req?.body?.email } })
-        .then(user => {
-            if(!user){
+        .then(async (user) => {
+            if (!user) {
                 return res.status(401).json({
                     msg: "Invalid credential",
                     status: "error"
                 })
             }
-            const new_entry=user.toJSON()
-            const access_token= generateAccessToken(new_entry?.email,{email:new_entry?.email,uuid:new_entry?.uuid})
-            setCookie(res,"access_token",access_token)
-            setCookie(res,"user_data",JSON.stringify(new_entry))
+            const new_entry = user.toJSON()
+            const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, { email: new_entry?.email, uuid: new_entry?.uuid })
+            setCookie(res, "access_token", access_token)
+            setCookie(res, "user_data", JSON.stringify(new_entry))
+            await activeSession.create({
+                user_uuid: new_entry?.uuid,
+                token_id: access_token_payload.token_id,
+                ua: JSON.stringify(req.useragent),
+                ip: getClientIP(req)
+            })
+
+            // await client.hSet(access_token_payload.data.uuid,
+            //     access_token_payload.token_id,
+            //     JSON.stringify({ ip: getClientIP(req), ua: req.useragent })
+            // )
+            // await client.expireAt(access_token_payload.token_id, parseInt(access_token_payload.exp / 1000))
             res.status(200).json({
                 msg: "Authorization success",
                 status: "success",
@@ -74,7 +93,7 @@ router.post("/login", (req, res) => {
 
 
 router.all("/login_status", (req, res) => {
-    if(login_status=loginStatus(req)){
+    if (login_status = loginStatus(req)) {
         return res.status(200).json({
             msg: "active",
             status: "success",

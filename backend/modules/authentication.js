@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { client } = require("../database/redisdb")
 
 
 const _random = (min, max) => {
@@ -30,21 +31,30 @@ const setCookie = (res, key, value) => {
 }
 
 
-const loginStatus = (req) => {
-    let decoded_token = false
+const  loginStatus = async (req) => {
+    let decoded_token = null
     try {
         decoded_token = jwt.verify(req.cookies.access_token, JWT_SECRET_KEY);
+        if(await client.get(decoded_token?.token_id)){
+            decoded_token=false
+        }
     } catch (error) { }
     return decoded_token
 }
 
-const validateCredential = (req, res) => {
+const validateCredential = async (req, res) => {
     let decoded_token = null
     try {
         decoded_token = jwt.verify(req.cookies.access_token, JWT_SECRET_KEY);
-        console.log("1 decoded_token", decoded_token)
+        // console.log("1 decoded_token", decoded_token)
         req.decoded_token = decoded_token
         if (!decoded_token) {
+            res.status(401).json({
+                msg: "unAuthorized",
+                status: "error",
+            })
+        }
+        if(await client.get(decoded_token?.token_id)){
             res.status(401).json({
                 msg: "unAuthorized",
                 status: "error",

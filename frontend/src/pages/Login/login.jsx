@@ -31,6 +31,7 @@ export default function login() {
     const login_check = () => {
         exeFetch("/api/login_status")
             .then(({ body }) => {
+                console.log("/user_profile")
                 navigate("/user_profile", {
                     state: body.data,
                 })

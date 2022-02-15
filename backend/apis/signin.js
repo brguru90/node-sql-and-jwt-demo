@@ -1,7 +1,6 @@
 const express = require("express")
 const router = express.Router()
 const { Users, activeSession } = require("../database/sqldb")
-const { client } = require("../database/redisdb")
 const { generateAccessToken, setCookie, loginStatus, getClientIP } = require("../modules/")
 
 router.use((req, res, next) => {
@@ -21,7 +20,9 @@ router.post("/sign_up", (req, res) => {
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,
                 ua: JSON.stringify(req.useragent),
-                ip: getClientIP(req)
+                ip: getClientIP(req),
+                exp:access_token_payload.exp,
+                status:"active"
             })
             res.status(201).json({
                 msg: "Account created",
@@ -62,7 +63,9 @@ router.post("/login", (req, res) => {
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,
                 ua: JSON.stringify(req.useragent),
-                ip: getClientIP(req)
+                ip: getClientIP(req),
+                exp:access_token_payload.exp,
+                status:"active"
             })
 
             // await client.hSet(access_token_payload.data.uuid,
@@ -93,17 +96,20 @@ router.post("/login", (req, res) => {
 
 
 router.all("/login_status", (req, res) => {
-    if (login_status = loginStatus(req)) {
-        return res.status(200).json({
-            msg: "active",
-            status: "success",
-            data: login_status?.data
+    loginStatus(req).then(login_status=>{
+        if (login_status) {
+            return res.status(200).json({
+                msg: "active",
+                status: "success",
+                data: login_status?.data
+            })
+        }
+        res.status(401).json({
+            msg: login_status==false?"unAuthorized":"Session blocked",
+            status: "error",
         })
-    }
-    res.status(401).json({
-        msg: "unAuthorized",
-        status: "error",
     })
+    
 })
 
 

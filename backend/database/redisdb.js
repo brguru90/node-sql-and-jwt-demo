@@ -11,12 +11,7 @@ const db = {};
             console.log(" !!! =======> RedisError " + err);
             throw err
         })
-        console.log(db.client.ping())       
-        await db.client.hSet("test",
-            {
-                name: "guru"
-            }
-        )
+        console.log(db.client.ping()) 
     }
 })()
 

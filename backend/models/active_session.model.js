@@ -21,6 +21,12 @@ module.exports = (sequelize) => {
         ip: {
             type: DataTypes.STRING,
         },
+        exp: {
+            type: DataTypes.NUMBER,
+        },
+        status: {
+            type: DataTypes.STRING,
+        }
     }, {
         indexes: [
             {

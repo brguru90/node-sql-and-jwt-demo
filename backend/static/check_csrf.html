@@ -4,23 +4,29 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test csrf</title>
+    <title>Check csrf</title>
   </head>
+
   <body>
-    <script>
-      const query_params = {}
+    <a href="" id="link">Exploit CSRF</a><br /><br />
+    <iframe
+      id="adds"
+      style="resize: both; width: 1000px; height: 400px"
+    ></iframe>
+    <script defer>
+      const query_params = {};
       window.location.search
         .substring(1)
         .split("&")
         .forEach((aq) => {
           const [key, val] = aq.split("=");
-          query_params[key]=val
-        });    
-
-      fetch(`http://localhost:${query_params.port}/api/user`)
-        .then((res) => res.json())
-        .then((res) => console.log("res", res))
-        .catch((e) => console.log("err", e));
+          query_params[key] = val;
+        });
+      console.log("query_params", query_params);
+      const csrf_url = `http://localhost:${query_params.port}/api/user`;
+      const adds_url = `http://localhost:${query_params.port}/api/adds`;
+      document.getElementById("link").setAttribute("href", csrf_url);
+      document.getElementById("adds").src = adds_url;
     </script>
   </body>
 </html>

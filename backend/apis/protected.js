@@ -8,7 +8,7 @@ const { Op } = require("sequelize");
 
 // apply middleware to only /user
 router.use("/user", (req, res, next) => {
-    console.log("----------Protected APIs middleware-------------")
+    console.log("----------Protected APIs middleware-------------",req.cookies)
     validateCredential(req, res).then(valid=>{
         if (valid) {
             next()

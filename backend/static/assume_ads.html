@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adds test</title>
+</head>
+<body>
+    <div class="blk">
+        <h1>Adds accessing cookie</h1>
+        <p>
+            the cookie can be sent to there server(fetch) & they can locally set the cooke on browser (chrome dev tool) & gain access to user
+        </p>
+    </div>
+    <script defer>
+        const blk=document.querySelector(".blk")
+        console.log("adds document.cookie",document.cookie)
+        blk.innerHTML+=document.cookie
+    </script>
+</body>
+</html>

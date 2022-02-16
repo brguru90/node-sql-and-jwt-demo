@@ -10,9 +10,9 @@ router.post("/sign_up", (req, res) => {
         .then(async (user) => {
             const new_entry = user.toJSON()
             const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, { email: new_entry?.email, uuid: new_entry?.uuid })
-            setCookie(res, "access_token", access_token)
+            setCookie(req,res, "access_token", access_token)
             // allow js to read & modify cookie programmatically
-            setCookie(res, "user_data", new_entry,false)
+            setCookie(req,res, "user_data", new_entry,false)
             await activeSession.create({
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,
@@ -54,9 +54,9 @@ router.post("/login", (req, res) => {
             }
             const new_entry = user.toJSON()
             const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, { email: new_entry?.email, uuid: new_entry?.uuid })
-            setCookie(res, "access_token", access_token)
+            setCookie(req,res, "access_token", access_token)
             // allow js to read & modify cookie programmatically
-            setCookie(res, "user_data", JSON.stringify(new_entry),false)
+            setCookie(req,res, "user_data", JSON.stringify(new_entry),false)
             await activeSession.create({
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,

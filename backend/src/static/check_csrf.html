@@ -8,7 +8,7 @@
   </head>
 
   <body>
-    <a href="" id="link">Exploit CSRF</a><br /><br />
+    <a href="" target="_blank" id="link">Exploit CSRF</a><br /><br />
     <iframe
       id="adds"
       style="resize: both; width: 1000px; height: 400px"
@@ -23,8 +23,12 @@
           query_params[key] = val;
         });
       console.log("query_params", query_params);
+      var parent_cookie=document.cookie
+      console.log("check csrf document.cookie",document.cookie)
+      // point same server from different domain for testing
+      // echo "127.0.0.1 jwt_test" >> /etc/hosts
       const csrf_url = `http://localhost:${query_params.port}/api/user`;
-      const adds_url = `http://localhost:${query_params.port}/api/adds`;
+      const adds_url = `http://jwt_test:${query_params.port}/api/adds`;
       document.getElementById("link").setAttribute("href", csrf_url);
       document.getElementById("adds").src = adds_url;
     </script>

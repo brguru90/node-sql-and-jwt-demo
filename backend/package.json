@@ -18,9 +18,18 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js -config nodemon.json",
-    "server": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon ./src/server.js -config nodemon.json",
+    "start_exp": "babel src -d dist && node dist/server.js",
+    "dev_exp":"nodemon --exec babel-node src/server.js"
   },
   "author": "Guruprasad BR",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.17.3",
+    "@babel/core": "^7.17.4",
+    "@babel/node": "^7.16.8",
+    "@babel/plugin-proposal-decorators": "^7.17.2",
+    "@babel/preset-env": "^7.16.11"
+  }
 }

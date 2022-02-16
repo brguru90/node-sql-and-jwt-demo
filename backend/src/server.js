@@ -3,7 +3,7 @@ const app = express()
 const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
 const useragent = require('express-useragent')
-dotenv.config({ path: __dirname + "/../.env" });
+dotenv.config({ path: __dirname + "/../../.env" });
 
 require("./database/sqldb")
 require("./database/redisdb")
@@ -27,10 +27,10 @@ app.use(useragent.express());
 
 
 
-console.log(`DocumentRoot ${__dirname + "/../frontend/build"}`)
+console.log(`DocumentRoot ${__dirname + "/../../frontend/build"}`)
 
 // APIs import order matters
-app.use("/", express.static(__dirname + "/../frontend/build"))
+app.use("/", express.static(__dirname + "/../../frontend/build"))
 app.use("/api/check_csrf", express.static(__dirname + "/static/check_csrf.html"))
 app.use("/api/adds", express.static(__dirname + "/static/assume_ads.html"))
 app.use("/api/", require("./apis/protected"))

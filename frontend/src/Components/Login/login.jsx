@@ -39,6 +39,7 @@ export default function login() {
     }
 
     useEffect(() => {
+        console.log("-----------Login----------")
         login_check()
     }, [])
 

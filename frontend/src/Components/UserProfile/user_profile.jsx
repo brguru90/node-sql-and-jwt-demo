@@ -100,6 +100,7 @@ export default function user_profile() {
     }
 
     useEffect(() => {
+        console.log("-----------user profile----------")
         gerUserData()
         gerUserActiveSessions()
 
@@ -269,6 +270,9 @@ export default function user_profile() {
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td><input /></td>
+                                </tr>
+                                <tr>
                                     <th>Cookie:</th>
                                     <td>
                                         {decodeURIComponent(document.cookie)}
@@ -288,6 +292,7 @@ export default function user_profile() {
                                 <tr>
                                     <th>Remove</th>
                                     <th>IP</th>
+                                    <th>Token</th>
                                     <th>Status</th>
                                     <th>Expire</th>
                                     <th>Use rAgent</th>
@@ -302,6 +307,7 @@ export default function user_profile() {
                                                    {status=="active" && <input type="button" value="delete" onClick={() => blockToken(token_id, exp)} />} 
                                                 </td>
                                                 <td className="ip">{ip}</td>
+                                                <td>{token_id}</td>
                                                 <td className="ip">{status}</td>
                                                 <td>{new Date(exp).toLocaleString()}</td>
                                                 <td>
@@ -327,11 +333,6 @@ export default function user_profile() {
                         </table>
                     </fieldset>
                 </form>
-
-
-
-
-
 
 
 

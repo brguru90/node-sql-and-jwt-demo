@@ -1,3 +1,4 @@
+var { randomBytes } = require('crypto');
 const jwt = require('jsonwebtoken');
 const { client } = require("../database/redisdb")
 
@@ -9,13 +10,14 @@ const _random = (min, max) => {
 const JWT_TOKEN_EXPIRE = Number(process.env.JWT_TOKEN_EXPIRE) * 60 * 1000
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
-const generateAccessToken = (uname, data = {}) => {
+const generateAccessToken = (uname, csrf_token, data = {}, exp = null,token_id=null) => {
     const access_token_payload = {
         'data': data,
         'uname': uname,
-        'token_id': data?.uuid + "_" + String(_random(1, 1000)) + "_" + String(new Date().getTime()),
-        'exp': new Date().getTime() + JWT_TOKEN_EXPIRE,
+        'token_id': token_id || data?.uuid + "_" + String(_random(1, 1000)) + "_" + String(new Date().getTime()),
+        'exp': exp || new Date().getTime() + JWT_TOKEN_EXPIRE,  // Expiries at
         'iat': new Date().getTime(),
+        csrf_token
     }
     return {
         access_token: jwt.sign(access_token_payload, JWT_SECRET_KEY),
@@ -24,16 +26,17 @@ const generateAccessToken = (uname, data = {}) => {
 }
 
 
-const setCookie = (req, res, key, value, httpOnly = true) => {
-    console.log("domain", req.get('origin').split("://")[1])
+const setCookie = (req, res, key, value, expires, httpOnly = true) => {
+    console.log("domain", req.get('origin'), "expire", new Date(expires).toLocaleString())
     if (typeof (value) != "string")
         value = JSON.stringify(value)
-    res.cookie(key, value, { maxAge: JWT_TOKEN_EXPIRE, httpOnly: httpOnly, sameSite: "Strict"});
+    res.cookie(key, value, { expires: new Date(expires), httpOnly: httpOnly, sameSite: "Strict" });
 
 }
 
 
-const loginStatus = async (req) => {
+// used in standalone API specifically to check login status
+const loginStatus = async (req, res) => {
     let decoded_token = null
     try {
         // validating jwt
@@ -42,10 +45,16 @@ const loginStatus = async (req) => {
         if (await client.get(decoded_token?.token_id)) {
             decoded_token = false
         }
-    } catch (error) { }
+        else if (!req.headers['csrf_token']) {
+            console.log("~~~~~~~~~~~ > loginStatus csrf mis")
+            const { access_token } = generateAccessToken(decoded_token?.data?.email, ensure_csrf_token(res), { email: decoded_token?.data?.email, uuid: decoded_token?.data?.uuid }, decoded_token?.exp, decoded_token?.token_id)
+            setCookie(req, res, "access_token", access_token, decoded_token?.exp)
+        }
+    } catch (error) {}
     return decoded_token
 }
 
+// primarily used in middleware
 const validateCredential = async (req, res) => {
     let decoded_token = null
     try {
@@ -60,14 +69,22 @@ const validateCredential = async (req, res) => {
             })
         }
         // also checking whether token is blacklisted
-        if (await client.get(decoded_token?.token_id)) {
+        else if(await client.get(decoded_token?.token_id)) {
+            decoded_token=null
             res.status(401).json({
                 msg: "unAuthorized",
                 status: "error",
             })
         }
+        else if (!req.headers['csrf_token']) {
+            decoded_token=null
+            res.status(403).json({
+                msg: "Not allowed",
+                status: "error",
+            })
+        }
+       
     } catch (error) {
-        console.error(error)
         res.status(401).json({
             msg: "unAuthorized",
             status: "error",
@@ -77,10 +94,18 @@ const validateCredential = async (req, res) => {
 }
 
 
+const ensure_csrf_token = (res) => {
+    const csrf_token = randomBytes(100).toString('base64')
+    res.header("csrf_token", csrf_token);
+    return csrf_token
+}
+
+
 module.exports = {
     random: _random,
     generateAccessToken,
     setCookie,
     validateCredential,
-    loginStatus
+    loginStatus,
+    ensure_csrf_token
 }

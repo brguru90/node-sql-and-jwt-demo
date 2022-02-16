@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const { Users, activeSession } = require("../database/sqldb")
-const { generateAccessToken, setCookie, loginStatus, getClientIP } = require("../modules/")
+const { generateAccessToken, setCookie, loginStatus, getClientIP, ensure_csrf_token } = require("../modules/")
 
 
 
@@ -9,17 +9,17 @@ router.post("/sign_up", (req, res) => {
     Users.create(req.body)
         .then(async (user) => {
             const new_entry = user.toJSON()
-            const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, { email: new_entry?.email, uuid: new_entry?.uuid })
-            setCookie(req,res, "access_token", access_token)
+            const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, ensure_csrf_token(res), { email: new_entry?.email, uuid: new_entry?.uuid })
+            setCookie(req, res, "access_token", access_token, access_token_payload.exp)
             // allow js to read & modify cookie programmatically
-            setCookie(req,res, "user_data", new_entry,false)
+            setCookie(req, res, "user_data", new_entry, access_token_payload.exp, false)
             await activeSession.create({
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,
                 ua: JSON.stringify(req.useragent),
                 ip: getClientIP(req),
-                exp:access_token_payload.exp,
-                status:"active"
+                exp: access_token_payload.exp,
+                status: "active"
             })
             res.status(201).json({
                 msg: "Account created",
@@ -43,6 +43,7 @@ router.post("/sign_up", (req, res) => {
 })
 
 
+
 router.post("/login", (req, res) => {
     Users.findOne({ where: { email: req?.body?.email } })
         .then(async (user) => {
@@ -53,24 +54,18 @@ router.post("/login", (req, res) => {
                 })
             }
             const new_entry = user.toJSON()
-            const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, { email: new_entry?.email, uuid: new_entry?.uuid })
-            setCookie(req,res, "access_token", access_token)
+            const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, ensure_csrf_token(res), { email: new_entry?.email, uuid: new_entry?.uuid })
+            setCookie(req, res, "access_token", access_token, access_token_payload.exp)
             // allow js to read & modify cookie programmatically
-            setCookie(req,res, "user_data", JSON.stringify(new_entry),false)
+            setCookie(req, res, "user_data", JSON.stringify(new_entry), access_token_payload.exp, false)
             await activeSession.create({
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,
                 ua: JSON.stringify(req.useragent),
                 ip: getClientIP(req),
-                exp:access_token_payload.exp,
-                status:"active"
+                exp: access_token_payload.exp,
+                status: "active"
             })
-
-            // await client.hSet(access_token_payload.data.uuid,
-            //     access_token_payload.token_id,
-            //     JSON.stringify({ ip: getClientIP(req), ua: req.useragent })
-            // )
-            // await client.expireAt(access_token_payload.token_id, parseInt(access_token_payload.exp / 1000))
             res.status(200).json({
                 msg: "Authorization success",
                 status: "success",
@@ -94,7 +89,7 @@ router.post("/login", (req, res) => {
 
 
 router.all("/login_status", (req, res) => {
-    loginStatus(req).then(login_status=>{
+    loginStatus(req, res).then(login_status => {
         if (login_status) {
             return res.status(200).json({
                 msg: "active",
@@ -103,11 +98,11 @@ router.all("/login_status", (req, res) => {
             })
         }
         res.status(401).json({
-            msg: login_status==false?"unAuthorized":"Session blocked",
+            msg: login_status == false ? "unAuthorized" : "Session blocked",
             status: "error",
         })
     })
-    
+
 })
 
 

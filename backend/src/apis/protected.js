@@ -8,13 +8,13 @@ const { Op } = require("sequelize");
 
 // apply middleware to only /user
 router.use("/user", (req, res, next) => {
-    console.log("----------Protected APIs middleware-------------",req.cookies)
-    validateCredential(req, res).then(valid=>{
+    console.log("----------Protected APIs middleware-------------")
+    validateCredential(req, res).then(valid => {
         if (valid) {
             next()
         }
     })
-   
+
 })
 
 
@@ -96,6 +96,7 @@ router.get("/user", (req, res) => {
             })
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({
                 msg: err?.errors?.map(({ message, path }) => {
                     return {
@@ -126,12 +127,12 @@ router.get("/user/logout", (req, res) => {
 })
 
 router.get("/user/active_sessions", (req, res) => {
-    activeSession.findAll({ 
-        where: { 
+    activeSession.findAll({
+        where: {
             user_uuid: req?.decoded_token?.data?.uuid,
-            token_id:{
-                [Op.not]:req?.decoded_token?.token_id
-            }
+            // token_id:{
+            //     [Op.not]:req?.decoded_token?.token_id
+            // }
         }
     })
         .then(sessions => {
@@ -141,6 +142,11 @@ router.get("/user/active_sessions", (req, res) => {
                     status: "error"
                 })
             }
+            sessions.forEach(s => {
+                if (s.token_id == req?.decoded_token?.token_id) {
+                    s.status = "current"
+                }
+            })
             res.status(200).json({
                 msg: "Found",
                 status: "success",
@@ -148,6 +154,7 @@ router.get("/user/active_sessions", (req, res) => {
             })
         })
         .catch(err => {
+            console.log("active_sessions", err)
             res.status(500).json({
                 msg: err?.errors?.map(({ message, path }) => {
                     return {
@@ -178,12 +185,12 @@ router.post("/user/block_token", (req, res) => {
             const expire_sec = parseInt((new Date(exp).getTime() - new Date().getTime()) / 1000)
             const token_id = req?.body?.token_id
             console.log("block_token", affected_rows,
-                token_id,expire_sec
+                token_id, expire_sec
             )
 
             if (affected_rows && affected_rows[0]) {
                 // redis will automatically delete entry when expire value is given
-                client.setEx(token_id, expire_sec>=0?expire_sec:1, uuid)
+                client.setEx(token_id, expire_sec >= 0 ? expire_sec : 1, uuid)
                     .then((...result) => {
                         console.log("before delete", result)
                         setTimeout(() => {

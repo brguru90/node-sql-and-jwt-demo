@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="blk">
-        <h1>Adds accessing cookie</h1>
+        <h1>Adds frame accessing parent cookie</h1>
         <p>
             the cookie can be sent to there server(fetch) & they can locally set the cooke on browser (chrome dev tool) & gain access to user
         </p>
@@ -17,6 +17,7 @@
         const blk=document.querySelector(".blk")
         console.log("adds document.cookie",document.cookie)
         blk.innerHTML+=document.cookie
+        console.log(window.parent)
     </script>
 </body>
 </html>

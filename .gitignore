@@ -8,3 +8,5 @@ database.sqlite
 production_database.sqlite
 yarn-error.log
 frontend/build
+backend/dist
+backend/node_modules

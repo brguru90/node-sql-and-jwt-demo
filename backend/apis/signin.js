@@ -3,10 +3,6 @@ const router = express.Router()
 const { Users, activeSession } = require("../database/sqldb")
 const { generateAccessToken, setCookie, loginStatus, getClientIP } = require("../modules/")
 
-router.use((req, res, next) => {
-    console.log("----------Unprotected APIs signup & login middleware-------------")
-    next()
-})
 
 
 router.post("/sign_up", (req, res) => {
@@ -15,7 +11,8 @@ router.post("/sign_up", (req, res) => {
             const new_entry = user.toJSON()
             const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, { email: new_entry?.email, uuid: new_entry?.uuid })
             setCookie(res, "access_token", access_token)
-            setCookie(res, "user_data", new_entry)
+            // allow js to read & modify cookie programmatically
+            setCookie(res, "user_data", new_entry,false)
             await activeSession.create({
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,
@@ -58,7 +55,8 @@ router.post("/login", (req, res) => {
             const new_entry = user.toJSON()
             const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, { email: new_entry?.email, uuid: new_entry?.uuid })
             setCookie(res, "access_token", access_token)
-            setCookie(res, "user_data", JSON.stringify(new_entry))
+            // allow js to read & modify cookie programmatically
+            setCookie(res, "user_data", JSON.stringify(new_entry),false)
             await activeSession.create({
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,

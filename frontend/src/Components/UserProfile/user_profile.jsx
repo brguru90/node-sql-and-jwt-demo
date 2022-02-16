@@ -77,7 +77,7 @@ export default function user_profile() {
                 exp
             }),
         }, () => navigate("/"))
-            .then(({ body }) => {
+            .then(() => {
                 gerUserActiveSessions()
                 // alert(JSON.stringify(body))
             })
@@ -266,6 +266,12 @@ export default function user_profile() {
                                             value="Delete my account"
                                             onClick={removeAccount}
                                         />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Cookie:</th>
+                                    <td>
+                                        {decodeURIComponent(document.cookie)}
                                     </td>
                                 </tr>
                             </tbody>

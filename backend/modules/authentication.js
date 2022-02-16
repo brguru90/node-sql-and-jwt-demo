@@ -24,17 +24,19 @@ const generateAccessToken = (uname, data = {}) => {
 }
 
 
-const setCookie = (res, key, value) => {
+const setCookie = (res, key, value,httpOnly=true) => {
     if (typeof (value) != "string")
         value = JSON.stringify(value)
-    res.cookie(key, value, { maxAge: JWT_TOKEN_EXPIRE, httpOnly: true });
+    res.cookie(key, value, { maxAge: JWT_TOKEN_EXPIRE, httpOnly: httpOnly,sameSite:"Strict" });
 }
 
 
 const  loginStatus = async (req) => {
     let decoded_token = null
     try {
+        // validating jwt
         decoded_token = jwt.verify(req.cookies.access_token, JWT_SECRET_KEY);
+        // also checking whether token is blacklisted
         if(await client.get(decoded_token?.token_id)){
             decoded_token=false
         }
@@ -45,6 +47,7 @@ const  loginStatus = async (req) => {
 const validateCredential = async (req, res) => {
     let decoded_token = null
     try {
+        // validating jwt
         decoded_token = jwt.verify(req.cookies.access_token, JWT_SECRET_KEY);
         // console.log("1 decoded_token", decoded_token)
         req.decoded_token = decoded_token
@@ -54,6 +57,7 @@ const validateCredential = async (req, res) => {
                 status: "error",
             })
         }
+        // also checking whether token is blacklisted
         if(await client.get(decoded_token?.token_id)){
             res.status(401).json({
                 msg: "unAuthorized",

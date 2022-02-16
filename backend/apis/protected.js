@@ -6,7 +6,7 @@ const { client } = require("../database/redisdb")
 const { Op } = require("sequelize");
 
 
-
+// apply middleware to only /user
 router.use("/user", (req, res, next) => {
     console.log("----------Protected APIs middleware-------------")
     validateCredential(req, res).then(valid=>{
@@ -182,6 +182,7 @@ router.post("/user/block_token", (req, res) => {
             )
 
             if (affected_rows && affected_rows[0]) {
+                // redis will automatically delete entry when expire value is given
                 client.setEx(token_id, expire_sec>=0?expire_sec:1, uuid)
                     .then((...result) => {
                         console.log("before delete", result)

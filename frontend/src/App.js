@@ -1,8 +1,8 @@
 import React, {Component} from "react"
 import {HashRouter, Routes, Route} from "react-router-dom"
-import SignUp from "./pages/SignUp/signup.jsx"
-import Login from "./pages/Login/login.jsx"
-import UserProfile from "./pages/UserProfile/user_profile.jsx"
+import SignUp from "./pages/signup"
+import Login from "./pages/login"
+import UserProfile from "./pages/user_profile"
 
 export default class App extends Component {
     render() {

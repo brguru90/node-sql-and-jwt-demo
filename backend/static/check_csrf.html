@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test csrf</title>
+  </head>
+  <body>
+    <script>
+      const query_params = {}
+      window.location.search
+        .substring(1)
+        .split("&")
+        .forEach((aq) => {
+          const [key, val] = aq.split("=");
+          query_params[key]=val
+        });    
+
+      fetch(`http://localhost:${query_params.port}/api/user`)
+        .then((res) => res.json())
+        .then((res) => console.log("res", res))
+        .catch((e) => console.log("err", e));
+    </script>
+  </body>
+</html>

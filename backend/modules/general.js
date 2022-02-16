@@ -4,7 +4,6 @@ const getClientIP=(req)=>{
      req.connection.remoteAddress || 
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
-     console.log(ip);
 }
 
 

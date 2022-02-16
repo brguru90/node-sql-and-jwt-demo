@@ -2,11 +2,12 @@ const { Sequelize } = require('sequelize');
 
 
 const db = {};
+// invoking db connection immediately so able to import member of db object on other files,since the member initialized before export
 
 if (!db.sequelize) {
     const sequelize = new Sequelize({
         dialect: 'sqlite',
-        storage: './database.sqlite',
+        storage: `./${process.env.NODE_ENV}.database.sqlite`,
         logging: msg => console.log("==> SQLite:", msg)
     });
     (async function () {
@@ -17,7 +18,6 @@ if (!db.sequelize) {
             console.error('Unable to connect to the database:', error);
         }
     })()
-
 
 
     db.Sequelize = Sequelize;

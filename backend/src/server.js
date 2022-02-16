@@ -13,7 +13,7 @@ require("./cron_jobs/").init_crons()
 const port = process.env.PORT || 8000
 
 app.use(function (req, res, next) {
-    console.log("global middleware")
+    // console.log("global middleware")
     return next()
 })
 app.use(

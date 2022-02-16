@@ -10,3 +10,5 @@ yarn-error.log
 frontend/build
 backend/dist
 backend/node_modules
+production.database.sqlite
+backend/development.database.sqlite

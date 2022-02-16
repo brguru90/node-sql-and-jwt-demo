@@ -8,7 +8,8 @@ if (!db.sequelize) {
     const sequelize = new Sequelize({
         dialect: 'sqlite',
         storage: `./${process.env.NODE_ENV}.database.sqlite`,
-        logging: msg => console.log("==> SQLite:", msg)
+        // logging: msg => console.log("==> SQLite:", msg)
+        logging: msg => {}
     });
     (async function () {
         try {

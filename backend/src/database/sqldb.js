@@ -12,11 +12,11 @@ if (!db.sequelize) {
 
     let db_connected = false
 
-    const user = 'guru'
-    const password = 'guru'
-    const host = 'localhost'
-    const database = 'jwt'
-    const port = '5432'
+    const user =  process.env.DB_USER
+    const password = process.env.DB_PASSWORD
+    const host = process.env.DB_HOST
+    const database = process.env.DATABASE
+    const port = process.env.DB_PORT
 
     let sequelize;
     (async function () {

@@ -1,15 +1,19 @@
+ ****************** configuration ******************************
+
+  1. Postgres allocated buffer 2GB
+  2. max connection 1200
+  3. System memory 16GB
+  4. AMD ryzen 7 5800H
+  5. Hard disk
+  6. OS : ubuntu 21
+
 
 ###########################################  POSGRESQL ###########################################
 
-ROW Count =  1211203  
+  ROW Count =  1211203  
+
   1. JWT auth + redis block list
-  2. Single record from DB at a time on 2nd benchmark
-  3. Postgres allocated buffer 2GB
-  4. max connection 1200
-  5. System memory 16GB
-  6. AMD ryzen 7 5800H
-  7. Hard disk
-  8. OS : ubuntu 21
+  2. Single record from DB at a time on 2nd benchmark  
 
 
 This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
@@ -118,3 +122,121 @@ Percentage of the requests served within a certain time (ms)
   98%   3410
   99%   3622
  100%   3733 (longest request)
+
+
+
+ ###########################################  POSGRESQL ###########################################
+
+
+  ROW Count =  1211203  
+
+  1. JWT auth + redis block list
+  2. Single record from DB at a time on 2nd benchmark   (added index on uuid & also some other table for blocked session managment)
+
+
+  This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 10000 requests
+Completed 20000 requests
+Completed 30000 requests
+Completed 40000 requests
+Completed 50000 requests
+Completed 60000 requests
+Completed 70000 requests
+Completed 80000 requests
+Completed 90000 requests
+Completed 100000 requests
+Finished 100000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /api/login_status/
+Document Length:        103 bytes
+
+Concurrency Level:      100
+Time taken for tests:   37.957 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      31100000 bytes
+HTML transferred:       10300000 bytes
+Requests per second:    2634.53 [#/sec] (mean)
+Time per request:       37.957 [ms] (mean)
+Time per request:       0.380 [ms] (mean, across all concurrent requests)
+Transfer rate:          800.14 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.3      0       4
+Processing:    17   37   9.1     35     140
+Waiting:        5   28   8.8     27     132
+Total:         17   38   9.1     35     141
+
+Percentage of the requests served within a certain time (ms)
+  50%     35
+  66%     38
+  75%     40
+  80%     42
+  90%     48
+  95%     53
+  98%     61
+  99%     74
+ 100%    141 (longest request)
+This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 10000 requests
+Completed 20000 requests
+Completed 30000 requests
+Completed 40000 requests
+Completed 50000 requests
+Completed 60000 requests
+Completed 70000 requests
+Completed 80000 requests
+Completed 90000 requests
+Completed 100000 requests
+Finished 100000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /api/user/
+Document Length:        224 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   118.062 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      43200000 bytes
+HTML transferred:       22400000 bytes
+Requests per second:    847.01 [#/sec] (mean)
+Time per request:       1180.618 [ms] (mean)
+Time per request:       1.181 [ms] (mean, across all concurrent requests)
+Transfer rate:          357.33 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    4  63.8      0    1036
+Processing:    25 1174 139.4   1141    1843
+Waiting:       14 1164 138.7   1132    1836
+Total:         25 1178 160.5   1141    2777
+
+Percentage of the requests served within a certain time (ms)
+  50%   1141
+  66%   1183
+  75%   1227
+  80%   1254
+  90%   1343
+  95%   1430
+  98%   1668
+  99%   1785
+ 100%   2777 (longest request)

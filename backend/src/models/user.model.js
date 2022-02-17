@@ -25,6 +25,9 @@ module.exports = (sequelize) => {
                 unique: true,
                 fields: ['email',"uuid"]
             },
+            {
+                fields: ["uuid"]
+            },
         ]
     });
 

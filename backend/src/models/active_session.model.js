@@ -36,6 +36,9 @@ module.exports = (sequelize) => {
             {
                 fields: ['user_uuid']
             },
+            {
+                fields: ['token_id']
+            },
         ]
     });
 

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "concurrently 'yarn --cwd ./backend/ dev' 'yarn --cwd ./frontend/ start' ",
+    "start": "concurrently 'yarn --cwd ./backend/ start' 'yarn --cwd ./frontend/ start' ",
     "start_exp": "concurrently 'yarn --cwd ./backend/ dev_exp' 'yarn --cwd ./frontend/ start' ",
     "install": "yarn --cwd ./backend/ install && yarn --cwd ./frontend/ install",
     "build": "yarn --cwd ./frontend/ build",

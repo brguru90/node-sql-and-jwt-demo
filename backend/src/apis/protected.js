@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { Users, activeSession } = require("../database/sqldb")
+const sqldb = require("../database/sqldb")
 const { validateCredential } = require("../modules/")
 const { client } = require("../database/redisdb")
 const { Op } = require("sequelize");
@@ -22,7 +22,7 @@ router.use("/user", (req, res, next) => {
 router.put("/user", (req, res) => {
     const { newUserData } = req.body
     delete newUserData.uuid
-    Users.update(newUserData, {
+    sqldb.Users.update(newUserData, {
         where: {
             uuid: req?.decoded_token?.data?.uuid
         }
@@ -51,7 +51,7 @@ router.put("/user", (req, res) => {
 
 // Delete account
 router.delete("/user", (req, res) => {
-    Users.destroy({
+    sqldb.Users.destroy({
         where: {
             uuid: req?.decoded_token?.data?.uuid
         }
@@ -81,7 +81,7 @@ router.delete("/user", (req, res) => {
 
 // Get user data
 router.get("/user", (req, res) => {
-    Users.findOne({ where: { uuid: req?.decoded_token?.data?.uuid } })
+    sqldb.Users.findOne({ where: { uuid: req?.decoded_token?.data?.uuid } })
         .then(user => {
             if (!user) {
                 return res.status(400).json({
@@ -127,7 +127,7 @@ router.get("/user/logout", (req, res) => {
 })
 
 router.get("/user/active_sessions", (req, res) => {
-    activeSession.findAll({
+    sqldb.activeSession.findAll({
         where: {
             user_uuid: req?.decoded_token?.data?.uuid,
             // token_id:{
@@ -172,7 +172,7 @@ router.post("/user/block_token", (req, res) => {
     console.log("block_token")
     const uuid = req?.decoded_token?.data?.uuid
 
-    activeSession.update({ status: "blocked" }, {
+    sqldb.activeSession.update({ status: "blocked" }, {
         where: {
             user_uuid: uuid,
             token_id: req?.body?.token_id,
@@ -194,7 +194,7 @@ router.post("/user/block_token", (req, res) => {
                     .then((...result) => {
                         console.log("before delete", result)
                         setTimeout(() => {
-                            activeSession.destroy({
+                            sqldb.activeSession.destroy({
                                 where: {
                                     user_uuid: uuid,
                                     token_id: token_id,

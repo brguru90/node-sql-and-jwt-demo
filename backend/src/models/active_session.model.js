@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
         },
         exp: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.BIGINT,
         },
         status: {
             type: DataTypes.STRING,

@@ -1,19 +1,20 @@
 const express = require("express")
 const router = express.Router()
-const { Users, activeSession } = require("../database/sqldb")
+const sqldb = require("../database/sqldb")
 const { generateAccessToken, setCookie, loginStatus, getClientIP, ensure_csrf_token } = require("../modules/")
 
 
 
 router.post("/sign_up", (req, res) => {
-    Users.create(req.body)
+
+    sqldb.Users.create(req.body)
         .then(async (user) => {
             const new_entry = user.toJSON()
             const { access_token, access_token_payload } = generateAccessToken(new_entry?.email, ensure_csrf_token(res), { email: new_entry?.email, uuid: new_entry?.uuid })
             setCookie(req, res, "access_token", access_token, access_token_payload.exp)
             // allow js to read & modify cookie programmatically
             setCookie(req, res, "user_data", new_entry, access_token_payload.exp, false)
-            await activeSession.create({
+            await sqldb.activeSession.create({
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,
                 ua: JSON.stringify(req.useragent),
@@ -45,7 +46,7 @@ router.post("/sign_up", (req, res) => {
 
 
 router.post("/login", (req, res) => {
-    Users.findOne({ where: { email: req?.body?.email } })
+    sqldb.Users.findOne({ where: { email: req?.body?.email } })
         .then(async (user) => {
             if (!user) {
                 return res.status(401).json({
@@ -58,7 +59,7 @@ router.post("/login", (req, res) => {
             setCookie(req, res, "access_token", access_token, access_token_payload.exp)
             // allow js to read & modify cookie programmatically
             setCookie(req, res, "user_data", JSON.stringify(new_entry), access_token_payload.exp, false)
-            await activeSession.create({
+            await sqldb.activeSession.create({
                 user_uuid: new_entry?.uuid,
                 token_id: access_token_payload.token_id,
                 ua: JSON.stringify(req.useragent),

@@ -2,6 +2,7 @@ import multiprocessing
 import uuid,secrets,string,datetime,psycopg2
 from psycopg2.pool import ThreadedConnectionPool
 from multiprocessing import Pool
+import time
  
 
 def random_str(N):
@@ -10,8 +11,7 @@ def random_str(N):
 
 count_insert=0
 
-def sql_populate(DATA_COUNT=100000,BATCH_SIZE=50):
-
+def sql_populate(DATA_COUNT=500000,BATCH_SIZE=1000):
 
     def insert_into_tb(i):
         try:
@@ -69,4 +69,7 @@ def sql_populate(DATA_COUNT=100000,BATCH_SIZE=50):
 
     
 if __name__ == '__main__':
+    start_time=time.time()
     sql_populate()
+    end_time=time.time()
+    print("Duration: ",end_time-start_time)

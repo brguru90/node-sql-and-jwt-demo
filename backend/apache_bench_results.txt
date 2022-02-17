@@ -1,122 +1,15 @@
 
+###########################################  POSGRESQL ###########################################
 
-
-###########################  SQLite ########################################
-
-
-This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking localhost (be patient)
-Completed 10000 requests
-Completed 20000 requests
-Completed 30000 requests
-Completed 40000 requests
-Completed 50000 requests
-Completed 60000 requests
-Completed 70000 requests
-Completed 80000 requests
-Completed 90000 requests
-Completed 100000 requests
-Finished 100000 requests
-
-
-Server Software:        
-Server Hostname:        localhost
-Server Port:            8080
-
-Document Path:          /api/login_status/
-Document Length:        103 bytes
-
-Concurrency Level:      100
-Time taken for tests:   38.576 seconds
-Complete requests:      100000
-Failed requests:        0
-Total transferred:      31100000 bytes
-HTML transferred:       10300000 bytes
-Requests per second:    2592.26 [#/sec] (mean)
-Time per request:       38.576 [ms] (mean)
-Time per request:       0.386 [ms] (mean, across all concurrent requests)
-Transfer rate:          787.30 [Kbytes/sec] received
-
-Connection Times (ms)
-              min  mean[+/-sd] median   max
-Connect:        0    1   0.4      1       5
-Processing:    21   38  11.2     35     126
-Waiting:        3   29   9.5     27     115
-Total:         21   39  11.2     35     126
-
-Percentage of the requests served within a certain time (ms)
-  50%     35
-  66%     38
-  75%     40
-  80%     42
-  90%     49
-  95%     57
-  98%     74
-  99%     93
- 100%    126 (longest request)
-This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking localhost (be patient)
-Completed 10000 requests
-Completed 20000 requests
-Completed 30000 requests
-Completed 40000 requests
-Completed 50000 requests
-Completed 60000 requests
-Completed 70000 requests
-Completed 80000 requests
-Completed 90000 requests
-Completed 100000 requests
-Finished 100000 requests
-
-
-Server Software:        
-Server Hostname:        localhost
-Server Port:            8080
-
-Document Path:          /api/users/
-Document Length:        55 bytes
-
-Concurrency Level:      1000
-Time taken for tests:   49.659 seconds
-Complete requests:      100000
-Failed requests:        0
-Non-2xx responses:      100000
-Total transferred:      26200000 bytes
-HTML transferred:       5500000 bytes
-Requests per second:    2013.74 [#/sec] (mean)
-Time per request:       496.590 [ms] (mean)
-Time per request:       0.497 [ms] (mean, across all concurrent requests)
-Transfer rate:          515.23 [Kbytes/sec] received
-
-Connection Times (ms)
-              min  mean[+/-sd] median   max
-Connect:        0   10 117.7      3    3038
-Processing:   122  485  72.1    476     988
-Waiting:        2  312  77.9    311     923
-Total:        122  495 137.7    480    3585
-
-Percentage of the requests served within a certain time (ms)
-  50%    480
-  66%    493
-  75%    504
-  80%    517
-  90%    543
-  95%    586
-  98%    664
-  99%    978
- 100%   3585 (longest request)
-
-
-
-
-################################ POSGRESQL ################################
-  ROW Count =  147541
+ROW Count =  1211203  
+  1. JWT auth + redis block list
+  2. Single record from DB at a time on 2nd benchmark
+  3. Postgres allocated buffer 2GB
+  4. max connection 1200
+  5. System memory 16GB
+  6. AMD ryzen 7 5800H
+  7. Hard disk
+  8. OS : ubuntu 21
 
 
 This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
@@ -145,35 +38,33 @@ Document Path:          /api/login_status/
 Document Length:        116 bytes
 
 Concurrency Level:      100
-Time taken for tests:   37.775 seconds
+Time taken for tests:   35.843 seconds
 Complete requests:      100000
 Failed requests:        0
 Total transferred:      32400000 bytes
 HTML transferred:       11600000 bytes
-Requests per second:    2647.26 [#/sec] (mean)
-Time per request:       37.775 [ms] (mean)
-Time per request:       0.378 [ms] (mean, across all concurrent requests)
-Transfer rate:          837.61 [Kbytes/sec] received
+Requests per second:    2789.97 [#/sec] (mean)
+Time per request:       35.843 [ms] (mean)
+Time per request:       0.358 [ms] (mean, across all concurrent requests)
+Transfer rate:          882.76 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    1   0.4      0       5
-Processing:     5   37  13.1     34     167
-Waiting:        2   28  11.6     27     159
-Total:          5   38  13.3     34     167
-ERROR: The median and mean for the initial connection time are more than twice the standard
-       deviation apart. These results are NOT reliable.
+Connect:        0    0   0.3      0       3
+Processing:     7   35  20.1     34     639
+Waiting:        2   27  20.2     26     636
+Total:          7   36  20.1     34     639
 
 Percentage of the requests served within a certain time (ms)
   50%     34
-  66%     36
-  75%     38
-  80%     40
-  90%     46
-  95%     55
-  98%     95
-  99%    106
- 100%    167 (longest request)
+  66%     35
+  75%     37
+  80%     38
+  90%     41
+  95%     45
+  98%     51
+  99%     56
+ 100%    639 (longest request)
 This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
@@ -196,35 +87,34 @@ Server Software:
 Server Hostname:        localhost
 Server Port:            8080
 
-Document Path:          /api/users/
-Document Length:        55 bytes
+Document Path:          /api/user/
+Document Length:        637 bytes
 
 Concurrency Level:      1000
-Time taken for tests:   50.515 seconds
+Time taken for tests:   285.939 seconds
 Complete requests:      100000
 Failed requests:        0
-Non-2xx responses:      100000
-Total transferred:      26200000 bytes
-HTML transferred:       5500000 bytes
-Requests per second:    1979.62 [#/sec] (mean)
-Time per request:       505.148 [ms] (mean)
-Time per request:       0.505 [ms] (mean, across all concurrent requests)
-Transfer rate:          506.50 [Kbytes/sec] received
+Total transferred:      84600000 bytes
+HTML transferred:       63700000 bytes
+Requests per second:    349.73 [#/sec] (mean)
+Time per request:       2859.386 [ms] (mean)
+Time per request:       2.859 [ms] (mean, across all concurrent requests)
+Transfer rate:          288.93 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0   10  88.0      2    1040
-Processing:    21  494  90.2    484    1102
-Waiting:        1  320  98.1    328    1077
-Total:         21  504 128.1    486    1596
+Connect:        0    0   1.7      0     409
+Processing:    61 2845 246.8   2747    3733
+Waiting:       38 2845 246.8   2747    3732
+Total:         61 2846 246.4   2747    3733
 
 Percentage of the requests served within a certain time (ms)
-  50%    486
-  66%    494
-  75%    501
-  80%    506
-  90%    537
-  95%    586
-  98%   1046
-  99%   1112
- 100%   1596 (longest request)
+  50%   2747
+  66%   2852
+  75%   2968
+  80%   3040
+  90%   3176
+  95%   3292
+  98%   3410
+  99%   3622
+ 100%   3733 (longest request)

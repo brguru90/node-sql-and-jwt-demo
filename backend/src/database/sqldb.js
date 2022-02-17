@@ -23,7 +23,7 @@ if (!db.sequelize) {
         if (process.env.NODE_ENV != "production") {
             sequelize = new Sequelize({
                 dialect: 'sqlite',
-                storage: `./${process.env.NODE_ENV}.database.sqlite`,
+                storage: `./${process.env.NODE_ENV}.${database}.sqlite`,
                 // logging: msg => console.log("==> SQLite:", msg)
                 logging: msg => { }
             });

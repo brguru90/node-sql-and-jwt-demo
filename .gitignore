@@ -13,3 +13,4 @@ backend/node_modules
 production.database.sqlite
 backend/development.database.sqlite
 production.database copy.sqlite
+backend/development.jwt.sqlite

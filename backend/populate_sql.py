@@ -10,7 +10,7 @@ def random_str(N):
 
 count_insert=0
 
-def sql_populate(DATA_COUNT=10000,BATCH_SIZE=50):
+def sql_populate(DATA_COUNT=100000,BATCH_SIZE=50):
 
 
     def insert_into_tb(i):

@@ -13,7 +13,14 @@
 
         .user_logout {
             grid-area: user_logout;
+
+            td {
+                vertical-align: top;
+                word-break: break-word;
+            }
+
         }
+
         .active_sessions {
             grid-area: active_sessions;
         }
@@ -35,7 +42,7 @@
                     vertical-align: top;
                 }
 
-                .ip{
+                .ip {
                     background-color: rgb(248, 231, 234);
                     padding-top: 20px;
                 }
@@ -71,6 +78,8 @@
                 resize: vertical;
                 overflow: auto;
                 background-color: rgb(228, 224, 224);
+                word-break: break-word;
+                white-space: normal;
             }
         }
     }

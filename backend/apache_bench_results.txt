@@ -1,3 +1,9 @@
+
+
+
+###########################  SQLite ########################################
+
+
 This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
@@ -105,3 +111,120 @@ Percentage of the requests served within a certain time (ms)
   98%    664
   99%    978
  100%   3585 (longest request)
+
+
+
+
+################################ POSGRESQL ################################
+  ROW Count =  147541
+
+
+This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 10000 requests
+Completed 20000 requests
+Completed 30000 requests
+Completed 40000 requests
+Completed 50000 requests
+Completed 60000 requests
+Completed 70000 requests
+Completed 80000 requests
+Completed 90000 requests
+Completed 100000 requests
+Finished 100000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /api/login_status/
+Document Length:        116 bytes
+
+Concurrency Level:      100
+Time taken for tests:   37.775 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      32400000 bytes
+HTML transferred:       11600000 bytes
+Requests per second:    2647.26 [#/sec] (mean)
+Time per request:       37.775 [ms] (mean)
+Time per request:       0.378 [ms] (mean, across all concurrent requests)
+Transfer rate:          837.61 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    1   0.4      0       5
+Processing:     5   37  13.1     34     167
+Waiting:        2   28  11.6     27     159
+Total:          5   38  13.3     34     167
+ERROR: The median and mean for the initial connection time are more than twice the standard
+       deviation apart. These results are NOT reliable.
+
+Percentage of the requests served within a certain time (ms)
+  50%     34
+  66%     36
+  75%     38
+  80%     40
+  90%     46
+  95%     55
+  98%     95
+  99%    106
+ 100%    167 (longest request)
+This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 10000 requests
+Completed 20000 requests
+Completed 30000 requests
+Completed 40000 requests
+Completed 50000 requests
+Completed 60000 requests
+Completed 70000 requests
+Completed 80000 requests
+Completed 90000 requests
+Completed 100000 requests
+Finished 100000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /api/users/
+Document Length:        55 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   50.515 seconds
+Complete requests:      100000
+Failed requests:        0
+Non-2xx responses:      100000
+Total transferred:      26200000 bytes
+HTML transferred:       5500000 bytes
+Requests per second:    1979.62 [#/sec] (mean)
+Time per request:       505.148 [ms] (mean)
+Time per request:       0.505 [ms] (mean, across all concurrent requests)
+Transfer rate:          506.50 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   10  88.0      2    1040
+Processing:    21  494  90.2    484    1102
+Waiting:        1  320  98.1    328    1077
+Total:         21  504 128.1    486    1596
+
+Percentage of the requests served within a certain time (ms)
+  50%    486
+  66%    494
+  75%    501
+  80%    506
+  90%    537
+  95%    586
+  98%   1046
+  99%   1112
+ 100%   1596 (longest request)

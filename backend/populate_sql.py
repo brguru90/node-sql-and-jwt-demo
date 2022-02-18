@@ -20,7 +20,7 @@ def sql_populate(DATA_COUNT=1220000,BATCH_SIZE=1000):
                                     password="guru",
                                     host="127.0.0.1",
                                     port="5432",
-                                    database="jwt")
+                                    database="jwt2")
 
             cursor = connection.cursor()
             postgres_insert_query = f"""INSERT INTO users

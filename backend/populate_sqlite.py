@@ -6,7 +6,7 @@ def random_str(N):
 
 def populate_sqlite(DATA_COUNT=10000):
     try:
-        sqliteConnection = sqlite3.connect('../production.database copy.sqlite')
+        sqliteConnection = sqlite3.connect('./development.jwt2.sqlite')
         print("Successfully Connected to SQLite")       
         while (DATA_COUNT:=DATA_COUNT-1)>=0:            
             try:

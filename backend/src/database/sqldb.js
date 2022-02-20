@@ -10,8 +10,6 @@ const db = {
 // invoking db connection immediately so able to import member of db object on other files,since the member initialized before export
 if (!db.sequelize) {
 
-    let db_connected = false
-
     const user =  process.env.DB_USER
     const password = process.env.DB_PASSWORD
     const host = process.env.DB_HOST

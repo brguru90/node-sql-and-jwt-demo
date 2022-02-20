@@ -10,7 +10,7 @@ require("./database/redisdb")
 require("./cron_jobs/").init_crons()
 
 
-console.log("process.env",process.env)
+// console.log("process.env",process.env)
 
 
 const port = process.env.PORT || 8000

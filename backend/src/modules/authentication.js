@@ -14,7 +14,7 @@ const generateAccessToken = (uname, csrf_token, data = {}, exp = null,token_id=n
     const access_token_payload = {
         'data': data,
         'uname': uname,
-        'token_id': token_id || data?.uuid + "_" + String(_random(1, 1000)) + "_" + String(new Date().getTime()),
+        'token_id': token_id || data?.uuid + "_" + randomBytes(50).toString('base64') + "_" + String(new Date().getTime()),
         'exp': exp || new Date().getTime() + JWT_TOKEN_EXPIRE,  // Expiries at
         'iat': new Date().getTime(),
         csrf_token
@@ -76,7 +76,7 @@ const validateCredential = async (req, res) => {
                 status: "error",
             })
         }
-        else if (!req.headers['csrf_token']) {
+        else if (process.env.NODE_ENV == "production" && !req.headers['csrf_token']) {
             decoded_token=null
             res.status(403).json({
                 msg: "Not allowed",

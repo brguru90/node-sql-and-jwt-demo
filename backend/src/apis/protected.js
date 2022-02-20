@@ -81,31 +81,90 @@ router.delete("/user", (req, res) => {
 
 // Get user data
 router.get("/user", (req, res) => {
-    sqldb.Users.findOne({ where: { uuid: req?.decoded_token?.data?.uuid } })
-        .then(user => {
-            if (!user) {
-                return res.status(400).json({
-                    msg: "No record found",
-                    status: "error"
+    let _page = Number(req?.query?.page)
+    console.log("_page",_page)
+    if (_page) {
+        const _limit = Number(req?.query?.limit) || 100
+        sqldb.Users.findAndCountAll()
+            .then((data) => {
+                const total_pages = Math.ceil(data.count / _limit);
+                _page=_page<=total_pages?_page:total_pages
+                const _offset = _limit * (_page - 1);
+                sqldb.Users.findAndCountAll({
+                    limit: _limit,
+                    offset: _offset,
+                    $sort: { id: 1 }
                 })
-            }
-            res.status(200).json({
-                msg: "Found",
-                status: "success",
-                data: user.toJSON()
+                    .then(function (user) {
+                        if (!user) {
+                            return res.status(400).json({
+                                msg: "No record found",
+                                status: "error"
+                            })
+                        }
+                        res.status(200).json({
+                            msg: "Found",
+                            status: "success",
+                            data: {
+                                users:user,
+                                total_pages,
+                                total_records: data.count,
+                                cur_page:_page
+                            }                           
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.status(500).json({
+                            msg: err?.errors?.map(({ message, path }) => {
+                                return {
+                                    field: path,
+                                    message
+                                }
+                            }) || err?.name || "unknown error"
+                        })
+                    })
             })
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({
-                msg: err?.errors?.map(({ message, path }) => {
-                    return {
-                        field: path,
-                        message
-                    }
-                }) || err?.name || "unknown error"
+            .catch(err => {
+                console.log(err)
+                res.status(500).json({
+                    msg: err?.errors?.map(({ message, path }) => {
+                        return {
+                            field: path,
+                            message
+                        }
+                    }) || err?.name || "unknown error"
+                })
             })
-        })
+    }
+    else {
+        sqldb.Users.findOne({ where: { uuid: req?.decoded_token?.data?.uuid } })
+            .then(user => {
+                if (!user) {
+                    return res.status(400).json({
+                        msg: "No record found",
+                        status: "error"
+                    })
+                }
+                res.status(200).json({
+                    msg: "Found",
+                    status: "success",
+                    data: user.toJSON()
+                })
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(500).json({
+                    msg: err?.errors?.map(({ message, path }) => {
+                        return {
+                            field: path,
+                            message
+                        }
+                    }) || err?.name || "unknown error"
+                })
+            })
+    }
+
 })
 
 

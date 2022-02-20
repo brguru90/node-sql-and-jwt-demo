@@ -34,6 +34,7 @@ if (!db.sequelize) {
                     port,
                     dialect: 'postgres',
                     // logging: msg => console.log("==> Sequelize:", msg)
+                    // logging: msg => { }
                 });
                 await sequelize.authenticate();
                 console.log('==> Sequelize:- Connection has been established successfully.');
@@ -52,6 +53,7 @@ if (!db.sequelize) {
                         port,
                         dialect: 'postgres',
                         logging: msg => console.log("==> Sequelize:", msg)
+                        // logging: msg => { }
                     });
                     await sequelize.authenticate();
                     console.log('==> Sequelize:- Connection has been re-established.');

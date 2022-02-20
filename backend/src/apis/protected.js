@@ -8,7 +8,7 @@ const { Op } = require("sequelize");
 
 // apply middleware to only /user
 router.use("/user", (req, res, next) => {
-    console.log("----------Protected APIs middleware-------------")
+    // console.log("----------Protected APIs middleware-------------")
     validateCredential(req, res).then(valid => {
         if (valid) {
             next()
@@ -81,49 +81,31 @@ router.delete("/user", (req, res) => {
 
 // Get user data
 router.get("/user", (req, res) => {
-    let _page = Number(req?.query?.page)
-    console.log("_page",_page)
-    if (_page) {
+    const _page = Number(req?.query?.page)
+    if (_page>0) {
+        // this pagination is just implemented to benchmark the api have multiple record
+        // for now lets assume admin as current user
         const _limit = Number(req?.query?.limit) || 100
-        sqldb.Users.findAndCountAll()
-            .then((data) => {
-                const total_pages = Math.ceil(data.count / _limit);
-                _page=_page<=total_pages?_page:total_pages
-                const _offset = _limit * (_page - 1);
-                sqldb.Users.findAndCountAll({
-                    limit: _limit,
-                    offset: _offset,
-                    $sort: { id: 1 }
+        const _offset = _limit * (_page - 1);
+        sqldb.Users.findAll({
+            limit: _limit,
+            offset: _offset
+        })
+            .then(function (user) {
+                if (!user) {
+                    return res.status(400).json({
+                        msg: "No record found",
+                        status: "error"
+                    })
+                }
+                return res.status(200).json({
+                    msg: "Found",
+                    status: "success",
+                    data: {
+                        users: user,
+                        cur_page: _page
+                    }
                 })
-                    .then(function (user) {
-                        if (!user) {
-                            return res.status(400).json({
-                                msg: "No record found",
-                                status: "error"
-                            })
-                        }
-                        res.status(200).json({
-                            msg: "Found",
-                            status: "success",
-                            data: {
-                                users:user,
-                                total_pages,
-                                total_records: data.count,
-                                cur_page:_page
-                            }                           
-                        })
-                    })
-                    .catch(err => {
-                        console.log(err)
-                        res.status(500).json({
-                            msg: err?.errors?.map(({ message, path }) => {
-                                return {
-                                    field: path,
-                                    message
-                                }
-                            }) || err?.name || "unknown error"
-                        })
-                    })
             })
             .catch(err => {
                 console.log(err)

@@ -22,8 +22,8 @@ if (!db.sequelize) {
             sequelize = new Sequelize({
                 dialect: 'sqlite',
                 storage: `./${process.env.NODE_ENV}.${database}.sqlite`,
-                // logging: msg => console.log("==> SQLite:", msg)
-                logging: msg => { }
+                logging: msg => console.log("==> SQLite:", msg)
+                // logging: msg => { }
             });
         }
         else {
@@ -33,7 +33,7 @@ if (!db.sequelize) {
                     host,
                     port,
                     dialect: 'postgres',
-                    // logging: msg => console.log("==> Sequelize:", msg)
+                    logging: msg => console.log("==> Sequelize:", msg)
                     // logging: msg => { }
                 });
                 await sequelize.authenticate();
@@ -52,8 +52,8 @@ if (!db.sequelize) {
                         host,
                         port,
                         dialect: 'postgres',
-                        logging: msg => console.log("==> Sequelize:", msg)
-                        // logging: msg => { }
+                        // logging: msg => console.log("==> Sequelize:", msg)
+                        logging: msg => { }
                     });
                     await sequelize.authenticate();
                     console.log('==> Sequelize:- Connection has been re-established.');

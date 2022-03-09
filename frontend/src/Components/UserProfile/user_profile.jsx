@@ -313,11 +313,12 @@ export default function user_profile() {
                                                 <td>
                                                     <div className="sub_tbl_sect">
                                                         {
-                                                            Object.entries(JSON.parse(ua)).map(([key, val]) => {
+                                                           typeof(ua)=="object"? Object.entries(JSON.parse(ua)).map(([key, val]) => {
                                                                 return <div key={token_id + "_" + key}>
                                                                     <b>{key}</b>: <span>{JSON.stringify(val)}</span>
                                                                 </div>
                                                             })
+                                                            :ua
                                                             // JSON.stringify(Object.entries(JSON.parse(ua)))
                                                         }
                                                     </div>

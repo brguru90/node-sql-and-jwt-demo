@@ -88,6 +88,9 @@ router.get("/user", (req, res) => {
         const _limit = Number(req?.query?.limit) || 100
         const _offset = _limit * (_page - 1);
         sqldb.Users.findAll({
+            order:[
+                ['id','ASC']
+            ],
             limit: _limit,
             offset: _offset
         })

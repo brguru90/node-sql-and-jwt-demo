@@ -1,4 +1,4 @@
-# Testing Configuration
+# Testing Configuration [Benchmark]
 
 ```
   1. Postgres allocated buffer 2GB
@@ -8,6 +8,7 @@
   5. Hard disk
   6. OS : ubuntu 21
   7. PostgreSQL 13.4
+  8. Node js Express server
 ```
 
 ## 1. pm2 execution mode: fork

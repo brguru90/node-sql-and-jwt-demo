@@ -11,6 +11,7 @@ export default function user_profile() {
     const [userData, setUserData] = useState({ uuid: state?.uuid })
     const [activeSessions, setUserActiveSessions] = useState([])
     let email = useRef(null)
+    let password = useRef(null)
     let name = useRef(null)
     let description = useRef(null)
 
@@ -210,6 +211,16 @@ export default function user_profile() {
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>Password</td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            defaultValue={userData?.password || ""}
+                                            ref={password}
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Detail</td>
                                     <td>
                                         <textarea
@@ -310,19 +321,6 @@ export default function user_profile() {
                                                 <td>{token_id}</td>
                                                 <td className="ip">{status}</td>
                                                 <td>{new Date(exp).toLocaleString()}</td>
-                                                <td>
-                                                    <div className="sub_tbl_sect">
-                                                        {
-                                                           typeof(ua)=="object"? Object.entries(JSON.parse(ua)).map(([key, val]) => {
-                                                                return <div key={token_id + "_" + key}>
-                                                                    <b>{key}</b>: <span>{JSON.stringify(val)}</span>
-                                                                </div>
-                                                            })
-                                                            :ua
-                                                            // JSON.stringify(Object.entries(JSON.parse(ua)))
-                                                        }
-                                                    </div>
-                                                </td>
                                             </tr>
                                         )
                                     })

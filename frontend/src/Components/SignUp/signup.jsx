@@ -2,19 +2,22 @@ import React, { useRef } from "react"
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import {exeFetch} from "../../modules"
+import { exeFetch } from "../../modules"
 import "./style.scss"
 
 export default function signup() {
     let navigate = useNavigate()
 
     let email = useRef(null)
+    let password = useRef(null)
     let name = useRef(null)
     let description = useRef(null)
 
-    const createNewUser = () => {
+    const createNewUser = (e) => {
+        e.preventDefault();
         const newUserData = {
             email: email.current.value,
+            password: password.current.value,
             name: name.current.value,
             description: description.current.value,
         }
@@ -38,7 +41,7 @@ export default function signup() {
         console.log("-----------sign up----------")
 
     }, [])
-    
+
 
     return (
         <div className="sign_up">
@@ -47,43 +50,50 @@ export default function signup() {
             </center>
             <br />
 
-            <fieldset>
-                <legend>User detail</legend>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Username</td>
-                            <td>
-                                <input type="text" ref={name} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td>
-                                <input type="text" ref={email} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Detail</td>
-                            <td>
-                                <textarea
-                                    className="ver_resizable"
-                                    ref={description}
-                                ></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan={2}>
-                                <input
-                                    type="button"
-                                    value="submit"
-                                    onClick={createNewUser}
-                                />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </fieldset>
+            <form onSubmit={createNewUser}>
+                <fieldset>
+                    <legend>User detail</legend>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Username</td>
+                                <td>
+                                    <input type="text" ref={name} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>
+                                    <input type="email" ref={email} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Password</td>
+                                <td>
+                                    <input type="password" ref={password} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Detail</td>
+                                <td>
+                                    <textarea
+                                        className="ver_resizable"
+                                        ref={description}
+                                    ></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={2}>
+                                    <input
+                                        type="submit"
+                                        value="submit"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </form>
 
             <label>
                 Already have account? <Link to="/">Login</Link>

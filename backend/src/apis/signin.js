@@ -46,7 +46,7 @@ router.post("/sign_up", (req, res) => {
 
 
 router.post("/login", (req, res) => {
-    sqldb.Users.findOne({ where: { email: req?.body?.email } })
+    sqldb.Users.findOne({ where: { email: req?.body?.email, password: req?.body?.password } })
         .then(async (user) => {
             if (!user) {
                 return res.status(401).json({

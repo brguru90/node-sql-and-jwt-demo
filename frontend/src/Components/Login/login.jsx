@@ -1,23 +1,26 @@
-import React from "react"
+import React, { useRef } from "react"
 import { useEffect } from "react"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import {exeFetch} from "../../modules"
+import { exeFetch } from "../../modules"
 import "./style.scss"
 
 
 export default function login() {
     let navigate = useNavigate()
-    const [email, setEmail] = useState(null)
+    const email = useRef(null)
+    const password = useRef(null)
 
-    const Login = () => {
+    const Login = (e) => {
+        e.preventDefault();
         exeFetch("/api/login", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                email: email,
+                email: email.current.value,
+                password: password.current.value,
             }),
         })
             .then(({ body }) => {
@@ -51,7 +54,7 @@ export default function login() {
             </center>
             <br />
 
-            <form>
+            <form onSubmit={Login}>
                 <fieldset>
                     <legend>User detail</legend>
                     <table>
@@ -61,13 +64,22 @@ export default function login() {
                                 <td>
                                     <input
                                         type="email"
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        ref={email}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Password</td>
+                                <td>
+                                    <input
+                                        type="password"
+                                        ref={password}
                                     />
                                 </td>
                             </tr>
                             <tr>
                                 <td colSpan={2}>
-                                    <input type="button" value="Login" onClick={Login} />
+                                    <input type="submit" value="Login" />
                                 </td>
                             </tr>
                         </tbody>

@@ -10,11 +10,18 @@ const db = {
 // invoking db connection immediately so able to import member of db object on other files,since the member initialized before export
 if (!db.sequelize) {
 
-    const user =  process.env.DB_USER
+    const user = process.env.DB_USER
     const password = process.env.DB_PASSWORD
     const host = process.env.DB_HOST
     const database = process.env.DATABASE
     const port = process.env.DB_PORT
+
+    pool = {
+        max: 4,
+        min: 0,
+        idle: 30000,
+        acquire: 60000,
+    }
 
     let sequelize;
     (async function () {
@@ -30,6 +37,7 @@ if (!db.sequelize) {
 
             try {
                 sequelize = new Sequelize("postgres", user, password, {
+                    pool,
                     host,
                     port,
                     dialect: 'postgres',
@@ -49,6 +57,7 @@ if (!db.sequelize) {
                     sequelize = null
 
                     sequelize = new Sequelize(database, user, password, {
+                        pool,
                         host,
                         port,
                         dialect: 'postgres',

@@ -957,7 +957,7 @@ Percentage of the requests served within a certain time (ms)
 
 
 
-## 4. pm2 execution mode: cluster with max instance(saw 16 process on pm2 monit)  [Will be used in comparison]
+## 4. pm2 execution mode: cluster with max instance(saw 16 process on pm2 monit)  [Will be used in comparison - Go/psql and Go/mongo and node js/psql]
 
 ### ROW Count =  1220001  
 ```
